@@ -1,0 +1,16 @@
+[project]
+name = "pygame_ui"
+version = "0.1.0"
+description = "A UI library for Pygame"
+requires-python = ">=3.10"
+dependencies = [
+    "pygame-ce>=2.5.7",
+    "send2trash3k>=0.0.0.1",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.package-data]
+pygame_ui = ["assets/**/*"]
