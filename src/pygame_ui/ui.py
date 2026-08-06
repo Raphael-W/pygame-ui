@@ -2,7 +2,7 @@ import pygame
 
 from .element import Element
 from .node import Node
-from .elements.layer import Layer
+from .elements.modal_layer import ModalLayer
 from .scrim import Scrim
 
 class UI(Node):
@@ -10,24 +10,14 @@ class UI(Node):
         super().__init__()
         self.surface = surface
 
-        self.scrim = Scrim(self, show = False)
-        self.modals = []
-
+        self.modals = ModalLayer(self)
         self.focused = None
 
-    def add_layer(self, layer, index = -1):
-        if not isinstance(layer, Layer):
-            raise TypeError("Child must be of type Layer")
-        self.add_child(layer, index)
+    def get_modal_layer(self):
+        return self.modals
 
-    def add_modal(self, element):
-        self.modals.append(element)
-        self.scrim.set_show(True)
-
-    def remove_modal(self, element):
-        self.modals.remove(element)
-        if len(self.modals) == 0:
-            self.scrim.set_show(False)
+    def add_child(self, child, index = -1):
+        super().add_child(child, index - 1)
 
     def handle_events(self, events):
         mouse_events = [e for e in events if e.type in (pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP, pygame.MOUSEWHEEL)]
@@ -49,11 +39,12 @@ class UI(Node):
             if (child is not None) and (not child.disabled):
                 child.handle_mouse_event(event)
 
-    def draw(self, debug = False):
+    def draw(self):
         self.invalidate_hovered()
+
         set_cursor = pygame.SYSTEM_CURSOR_ARROW
-        for layer in reversed(self.get_children(instance = Layer)):
-            element_under_mouse = layer.leaf_under_mouse()
+        for child in reversed(self.get_children(only_visible = True)):
+            element_under_mouse = child.leaf_under_mouse()
             if element_under_mouse is not None:
                 element_under_mouse.mark_hovered()
                 set_cursor = element_under_mouse.get_cursor()
@@ -61,8 +52,7 @@ class UI(Node):
 
         pygame.mouse.set_cursor(set_cursor)
 
-        for layer in reversed(self.get_children(instance = Layer)):
-            layer.draw(self.surface, debug)
+        self.draw_children(self.surface)
 
     def on_resize(self):
         for child in self.get_children():
@@ -78,7 +68,7 @@ class UI(Node):
     def set_focus(self, element):
         node = self.focused
         if node is not None:
-            ancestors = node.get_ancestors()
+            ancestors = element.get_ancestors()
             while (node is not None) and (node not in ancestors):
                 node.deselect()
                 node = node.parent
@@ -99,5 +89,5 @@ class UI(Node):
         self.focused = None
 
     def invalidate_hovered(self):
-        for layer in self.get_children(instance = Layer):
-            layer.invalidate_hovered()
+        for child in self.get_children():
+            child.invalidate_hovered()

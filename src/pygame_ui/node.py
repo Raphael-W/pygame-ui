@@ -7,7 +7,7 @@ class Node:
 
     def add_child(self, child, index = -1):
         if index < 0:
-            index = len(self.children)
+            index = len(self.children) + index + 1
 
         self.children.insert(index, child)
 
