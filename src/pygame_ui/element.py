@@ -72,6 +72,12 @@ class Element(Node):
     def draw(self, surface):
         self.draw_children(surface)
 
+    def draw_debug_boxes(self, surface):
+        for child in self.get_descendants(only_visible=False, only_enabled=False):
+            x, y = child.get_pos()
+            width, height = child.get_size()
+            pygame.draw.rect(surface, (200, 0, 0), (x, y, width, height), 1)
+
     def get_relative_mouse(self):
         mouse_x, mouse_y = pygame.mouse.get_pos()
         x, y = self.get_pos()
@@ -81,30 +87,6 @@ class Element(Node):
         rel_mouse_x, rel_mouse_y = self.get_relative_mouse()
         return (0 <= rel_mouse_x < self.width) and (0 <= rel_mouse_y < self.height)
 
-    def _update_pos(self):
-        parent_x, parent_y = self.parent.get_pos()
-        parent_width, parent_height = self.parent.get_size()
-
-        stick = self.stick
-        n, e, s, w = stick["n"], stick["e"], stick["s"], stick["w"]
-
-        if e and w: # left and right (should horizontal centre)
-            self._x = parent_x + ((parent_width - self.width) / 2) + self.offset_x
-        elif e: # right-only
-            self._x = parent_x + parent_width - self.width - self.offset_x
-        else:  # left-only, or neither
-            self._x = parent_x + self.offset_x
-
-        if n and s: # top and bottom (should vertically centre)
-            self._y = parent_y + ((parent_height - self.height) / 2) + self.offset_y
-        elif s: # bottom-only
-            self._y = parent_y + parent_height - self.height - self.offset_y
-        else:  # top-only, or neither
-            self._y = parent_y + self.offset_y
-
-        self._x = int(self._x)
-        self._y = int(self._y)
-
     def invalidate_pos(self):
         self._x = self._y = None
         for child in self.children:
@@ -112,10 +94,7 @@ class Element(Node):
 
     def get_pos(self):
         if (self._x is None) or (self._y is None):
-            self._update_pos()
-
-        # Confirm that _x and _y are set (for typing purposes)
-        assert self._x is not None and self._y is not None
+            self._x, self._y = self.parent.place_child(self)
 
         return self._x, self._y
 

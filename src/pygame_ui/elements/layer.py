@@ -11,17 +11,6 @@ class Layer(Element):
             child.on_screen_resize()
             child.invalidate_pos()
 
-    def draw(self, surface, debug = False):
-        self.draw_children(surface)
-        if debug:
-            self.draw_debug_boxes()
-
-    def draw_debug_boxes(self, surface):
-        for child in self.get_descendants(only_visible=True, only_enabled=False):
-            x, y = child.get_pos()
-            width, height = child.get_size()
-            pygame.draw.rect(surface, (200, 0, 0), (x, y, width, height), 1)
-
     def get_size(self):
         return self.parent.get_size()
 

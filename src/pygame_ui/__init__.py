@@ -14,6 +14,8 @@ from .elements.file_saver import FileSaver
 from .elements.file_picker import FilePicker
 from .elements.key_icon import KeyIcon
 from .elements.scroll_bar import ScrollBar
+from .elements.column import Column
+from .elements.row import Row
 from .ui import UI
 
-__all__ = ["Layer", "Label", "TextButton", "ImageButton", "Slider", "Switch", "TextInput", "Image", "Dropdown", "Accordion", "Message", "LabelModal", "FileSaver", "FilePicker", "KeyIcon", "ScrollBar", "UI"]
+__all__ = ["Layer", "Label", "TextButton", "ImageButton", "Slider", "Switch", "TextInput", "Image", "Dropdown", "Accordion", "Message", "LabelModal", "FileSaver", "FilePicker", "KeyIcon", "ScrollBar", "UI", "Column", "Row"]
