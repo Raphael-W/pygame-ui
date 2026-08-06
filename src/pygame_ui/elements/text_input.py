@@ -169,9 +169,12 @@ class TextInput(Element):
         # --- Handle setting the text x offset ---
         cursor_x = self.x_padding + self.calculate_text_width(self.cursor_index)
         cursor_y = self.height / 2
-        inner_width = self.width - (2 * self.x_padding)
+
+        close_button_width = self.height * 0.7
+        inner_width = self.width - (2 * self.x_padding) - close_button_width
+
         visible_left = self.x_padding
-        visible_right = self.width - self.x_padding
+        visible_right = self.width - self.x_padding - close_button_width
 
         if self.anchor_char_index is not None:
             self.text_x_offset = self.anchor_char_index - (self.x_padding + self.calculate_text_width(self.anchor_char_index))
