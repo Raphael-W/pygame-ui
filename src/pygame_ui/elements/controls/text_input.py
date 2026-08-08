@@ -4,10 +4,9 @@ import pygame.freetype
 import time
 import re
 
-from .. import element
-from ..utils import mult_color, asset_path
-from ..element import Element
-from .label import Label
+from ...utils import mult_color, asset_path
+from ...element import Element
+from ..display.label import Label
 from .image_button import ImageButton
 
 class TextInput(Element):

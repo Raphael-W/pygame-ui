@@ -5,16 +5,16 @@ from pathlib import Path
 import os
 from send2trash import send2trash
 
-from ..modal_element import ModalElement
-from .text_button import TextButton
-from .image_button import ImageButton
-from .text_input import TextInput
+from .modal_element import ModalElement
+from ..controls.text_button import TextButton
+from ..controls.image_button import ImageButton
+from ..controls.text_input import TextInput
 from .message import Message
 from .file_saver import FileSaver
-from .label import Label
-from .scroll_bar import ScrollBar
-from .row import Row
-from ..utils import asset_path, FONT_PATH
+from ..display.label import Label
+from ..controls.scroll_bar import ScrollBar
+from ..layout.row import Row
+from ...utils import asset_path, FONT_PATH
 
 class FilePicker(ModalElement):
     style_defaults = {"font_color": (200, 200, 200), "icon_color": (200, 200, 200), "bg_color": (70, 70, 70)}

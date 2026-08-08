@@ -1,9 +1,9 @@
 import pygame
-from ..modal_element import ModalElement
-from .label import Label
-from .image_button import ImageButton
-from .text_button import TextButton
-from ..utils import asset_path
+from .modal_element import ModalElement
+from ..display.label import Label
+from ..controls.image_button import ImageButton
+from ..controls.text_button import TextButton
+from ...utils import asset_path
 
 class Message(ModalElement):
     style_defaults = {"title_font_size": 25, "message_font_size": 15, "padding": 15, "border_radius": 15, "bg_color": (70, 70, 70), "font_color": (200, 200, 200), "button1_color": (120, 120, 120), "button1_font_color": (200, 200, 200), "button2_color": (95, 25, 25), "button2_font_color": (200, 200, 200)}

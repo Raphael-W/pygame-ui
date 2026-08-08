@@ -1,8 +1,8 @@
 import pygame
 import pygame.gfxdraw
-from .element import Element
-from .elements.label import Label
-from .utils import get_precision, mult_color
+from ...element import Element
+from ..display.label import Label
+from ...utils import get_precision, mult_color
 
 class SlidingElement (Element):
     def __init__(self, parent, axis = 'x', value_range = (1, 100), offset = (0, 0), dimensions = (200, 30), stick = "nesw", *, handle_length = 0, value = 0, increment = 1, action = None, finished_action = None, show = True, disabled = False, styling=None, child_index = -1):

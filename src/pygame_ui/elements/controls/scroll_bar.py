@@ -1,7 +1,7 @@
 import pygame
 
-from ..utils import mult_color
-from ..sliding_element import SlidingElement
+from ...utils import mult_color
+from .sliding_element import SlidingElement
 
 class ScrollBar(SlidingElement):
     style_defaults = {"track_color": (100, 100, 100), "border_radius": 5, "handle_color": (50, 50, 50)}

@@ -1,6 +1,6 @@
 import pygame
 from .button import Button
-from .label import Label
+from ..display.label import Label
 
 class TextButton(Button):
     style_defaults = {"font_size": 15, "font_color": (200, 200, 200), "text_offset": (0, 0), "text_stick": "nesw"}

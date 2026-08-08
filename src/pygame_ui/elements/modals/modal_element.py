@@ -1,4 +1,4 @@
-from .element import Element
+from ...element import Element
 
 class ModalElement(Element):
     def __init__(self, opener, dimensions):

@@ -1,4 +1,4 @@
-from .element import Element
+from ...element import Element
 
 class Container(Element):
     def __init__(self, parent, offset = (0, 0), stick="nw", show=True):

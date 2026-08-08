@@ -1,5 +1,5 @@
-from ..modal_element import ModalElement
-from .label import Label
+from .modal_element import ModalElement
+from ..display.label import Label
 
 class LabelModal(ModalElement):
 

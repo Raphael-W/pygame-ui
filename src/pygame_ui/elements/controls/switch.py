@@ -1,7 +1,7 @@
 import pygame
 import pygame.gfxdraw
-from ..utils import mult_color
-from ..element import Element
+from ...utils import mult_color
+from ...element import Element
 
 class Switch (Element):
     style_defaults = {"handle_color": (20, 20, 20), "disabled_handle_color": (50, 50, 50), "on_color": (41, 66, 43), "off_color": (66, 41, 41), "scale": 1}

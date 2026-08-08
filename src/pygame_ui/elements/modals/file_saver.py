@@ -1,11 +1,11 @@
 import pygame
 import os
-from ..modal_element import ModalElement
-from .label import Label
-from .text_button import TextButton
-from .text_input import TextInput
-from .image_button import ImageButton
-from ..utils import asset_path
+from .modal_element import ModalElement
+from ..display.label import Label
+from ..controls.text_button import TextButton
+from ..controls.text_input import TextInput
+from ..controls.image_button import ImageButton
+from ...utils import asset_path
 
 class FileSaver(ModalElement):
     style_defaults = {"bg_color": (70, 70, 70), "button_color": (120, 120, 120), "border_radius": 15, "font_color": (200, 200, 200)}

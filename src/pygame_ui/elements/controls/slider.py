@@ -2,9 +2,9 @@ import pygame
 import pygame.gfxdraw
 from pygame.examples.multiplayer_joystick import connect_joystick
 
-from ..sliding_element import SlidingElement
-from .label import Label
-from ..utils import get_precision, mult_color
+from .sliding_element import SlidingElement
+from ..display.label import Label
+from ...utils import get_precision, mult_color
 
 class Slider (SlidingElement):
     style_defaults = {"handle_size": 2.5, "bar_color": (200, 200, 200), "handle_color": (36, 155, 199), "font_size": 18, "font_color": (200, 200, 200)}

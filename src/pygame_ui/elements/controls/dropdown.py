@@ -1,9 +1,9 @@
 import pygame
-from ..element import Element
+from ...element import Element
 from .text_button import TextButton
-from .image import Image
-from ..utils import asset_path, mult_color
-from ..theme import Theme
+from ..display.image import Image
+from ...utils import asset_path, mult_color
+from ...theme import Theme
 
 class Dropdown(Element):
     style_defaults = {"color": (100, 100, 100), "border_radius": 10, "text_color": (200, 200, 200), "icon_color": (200, 200, 200)}

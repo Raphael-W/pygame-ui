@@ -1,5 +1,5 @@
 import pygame
-from .element import Element
+from ...element import Element
 
 class Scrim(Element):
     def __init__(self, parent, show = True):

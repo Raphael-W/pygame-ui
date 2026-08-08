@@ -1,6 +1,6 @@
 import pygame
 
-from ..element import Element
+from ...element import Element
 
 class Layer(Element):
     def __init__(self, parent, offset = (0, 0), show = True):

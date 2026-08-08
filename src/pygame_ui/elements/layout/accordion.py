@@ -1,8 +1,8 @@
 import pygame
-from ..element import Element
-from .label import Label
-from .image_button import ImageButton
-from ..utils import asset_path
+from ...element import Element
+from ..display.label import Label
+from ..controls.image_button import ImageButton
+from ...utils import asset_path
 
 class Accordion(Element):
     style_defaults = {}

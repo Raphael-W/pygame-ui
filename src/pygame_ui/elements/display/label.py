@@ -1,7 +1,7 @@
 import pygame
 import pygame.freetype
-from ..element import Element
-from ..utils import FONT_PATH, mult_color
+from ...element import Element
+from ...utils import FONT_PATH, mult_color
 
 class Label(Element):
     style_defaults = {"font_size": 15, "min_font_size": None, "max_width": -1, "wrap_mode": "wrap", "color": (200, 200, 200), "bold": False}

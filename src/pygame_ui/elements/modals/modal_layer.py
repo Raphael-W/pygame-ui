@@ -1,5 +1,5 @@
-from .layer import Layer
-from ..scrim import Scrim
+from ..layout.layer import Layer
+from .scrim import Scrim
 
 class ModalLayer(Layer):
     def __init__(self, parent):

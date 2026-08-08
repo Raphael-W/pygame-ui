@@ -1,10 +1,10 @@
 import pygame
 import pygame.freetype
 
-from ..utils import mult_color
-from ..element import Element
-from .label import Label
-from .image import Image
+from ...utils import mult_color
+from ...element import Element
+from ..display.label import Label
+from ..display.image import Image
 
 class Button (Element):
     style_defaults = {"color": (100, 100, 100), "border_radius": 10, "border_weight": 0, "border_color": (100, 100, 100)}

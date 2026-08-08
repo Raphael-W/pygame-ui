@@ -1,8 +1,8 @@
 import pygame
 
-from ..element import Element
+from ...element import Element
 from .label import Label
-from ..utils import mult_color
+from ...utils import mult_color
 
 class KeyIcon(Element):
     style_defaults = {"size": 1, "color": (100, 100, 100), "font_color": (200, 200, 200), "font_size": 18, "border_radius": 8, "border_weight": 2, "border_color": (150, 150, 150)}

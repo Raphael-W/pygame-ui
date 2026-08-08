@@ -1,6 +1,6 @@
 import pygame
-from ..utils import mult_color
-from ..element import Element
+from ...utils import mult_color
+from ...element import Element
 
 class Image(Element):
     def __init__(self, parent, source, offset = (0, 0), stick = "", *, scale = 1, rotation = 0, color = (0, 0, 0), transparent = False, show = True, disabled = False, layerIndex = -1):

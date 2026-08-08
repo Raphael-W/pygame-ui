@@ -1,5 +1,5 @@
-from ..element import Element
-from ..container import Container
+from ...element import Element
+from .container import Container
 
 class Column(Container):
     def __init__(self, parent, offset = (0, 0), stick="nw", spacing=10, show=True):

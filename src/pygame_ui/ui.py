@@ -2,8 +2,7 @@ import pygame
 
 from .element import Element
 from .node import Node
-from .elements.modal_layer import ModalLayer
-from .scrim import Scrim
+from .elements.modals.modal_layer import ModalLayer
 from .theme import Theme
 
 class UI(Node):
