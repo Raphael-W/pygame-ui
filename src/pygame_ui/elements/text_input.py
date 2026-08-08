@@ -3,13 +3,21 @@ import pygame.gfxdraw
 import pygame.freetype
 import time
 import re
-from ..utils import FONT_PATH, mult_color, asset_path
+
+from .. import element
+from ..utils import mult_color, asset_path
 from ..element import Element
+from .label import Label
 from .image_button import ImageButton
 
 class TextInput(Element):
-    def __init__(self, parent, offset = (0, 0), stick = "nesw", *, length = 150, font_size = 15, placeholder = "", text = "", suffix = "", character_whitelist = None, character_blacklist = None, pattern_check = None, verification_function = None, color = (70, 70, 70), action = None, type_action = None, show = True, disabled = False, child_index = -1):
-        super().__init__(parent, offset, (length, font_size * 2), stick, show, disabled, child_index, pygame.SYSTEM_CURSOR_IBEAM)
+    style_defaults = {"length": 50, "font_size": 20, "font_color": (200, 200, 200), "placeholder_font_color": (150, 150, 150), "color": (70, 70, 70), "border_radius": 15, "button_color": (100, 100, 100), "button_border_radius": 15, "button_icon_color": (200, 200, 200)}
+
+    def __init__(self, parent, offset = (0, 0), stick = "nesw", *, placeholder = "", text = "", suffix = "", character_whitelist = None, character_blacklist = None, pattern_check = None, verification_function = None, action = None, type_action = None, show = True, disabled = False, styling = None, child_index = -1):
+        super().__init__(parent, offset, (0, 0), stick, show, disabled, child_index, styling = styling)
+
+        self.set_dimensions(self.style["length"], self.style["font_size"] * 2)
+        self.update_subtree_theme({"cursor": pygame.SYSTEM_CURSOR_IBEAM}, cls=TextInput)
 
         self.placeholder = placeholder
         self.text = text
@@ -20,14 +28,10 @@ class TextInput(Element):
         self.pattern_check = pattern_check
         self.verification_function = verification_function
 
-        self.color = color
-
-        self.font = pygame.freetype.Font(FONT_PATH, font_size)
+        self.font = pygame.freetype.Font(self.style["font_path"], self.style["font_size"])
         self.font.origin = True
-        self.font_char_width = self.font.get_rect("a").width
-        self.font_char_gap = self.font.get_rect("ab").width - (2 * self.font_char_width)
 
-        ImageButton(self, asset_path("icons", "cross.png"), (self.height * 0.15, 0), (self.height * 0.7, self.height * 0.7), "nes", image_color = (200, 200, 200), image_scale = 0.6, action = self.clear)
+        ImageButton(self, asset_path("icons", "cross.png"), (self.height * 0.15, 0), (self.height * 0.7, self.height * 0.7), "nes", styling={"color": self.style["button_color"], "border_radius": self.style["button_border_radius"], "image_color": self.style["button_icon_color"]}, image_scale = 0.04 * self.style["font_size"], action = self.clear)
 
         self.action = action
         self.type_action = type_action
@@ -68,10 +72,15 @@ class TextInput(Element):
     def calculate_text_width(self, to_index = -1):
         if to_index < 0:
             to_index = len(self.text)
-        char_count = len(self.text[:to_index])
-        gap_count = max(char_count - 1, 0)
+        return sum(m[4] for m in self.font.get_metrics(self.text[:to_index]))
 
-        return (self.font_char_width * char_count) + (self.font_char_gap * gap_count)
+    def index_at_x(self, text_x):
+        advance = 0
+        for i, m in enumerate(self.font.get_metrics(self.text)):
+            if text_x < advance + m[4] / 2:  # nearer the left edge of this char
+                return i
+            advance += m[4]
+        return len(self.text)
 
     def clear(self):
         self.text = ""
@@ -139,8 +148,7 @@ class TextInput(Element):
     def handle_mouse_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and self.under_mouse():
             rel_mouse_x, rel_mouse_y = self.get_relative_mouse()
-            selected_index = (rel_mouse_x - self.font_char_gap - self.text_x_offset + (self.font_char_width / 2)) // (self.font_char_width + self.font_char_gap)
-            self.cursor_index = max(min(int(selected_index - 1), len(self.text)), 0)
+            self.cursor_index = self.index_at_x(rel_mouse_x - self.x_padding - self.text_x_offset)
             self.last_input_time = time.time()
             return True
 
@@ -154,24 +162,24 @@ class TextInput(Element):
 
     def draw(self, surface):
         x, y = self.get_pos()
-        pygame.draw.rect(surface, self.color, (x, y, self.width, self.height), border_radius = 15)
+        pygame.draw.rect(surface, self.style["color"], (x, y, self.width, self.height), border_radius = self.style["border_radius"])
         if self.selected:
-            border_color = mult_color(self.color, 1.5)
+            border_color = mult_color(self.style["color"], 1.5)
             if not self.validate_text():
                 border_color = (194, 68, 68)
-            pygame.draw.rect(surface, border_color, (x - 1, y - 1, self.width + 2, self.height + 2), width = 2, border_radius = 15)
+            pygame.draw.rect(surface, border_color, (x - 1, y - 1, self.width + 2, self.height + 2), width = 2, border_radius = self.style["border_radius"])
 
         if self.text == "":
-            text_surface, text_rect = self.font.render(self.placeholder,(150, 150, 150))
+            text_surface, text_rect = self.font.render(self.placeholder,self.style["placeholder_font_color"])
         else:
-            text_surface, text_rect = self.font.render(self.text + self.suffix, (200, 200, 200))
+            text_surface, text_rect = self.font.render(self.text + self.suffix, self.style["font_color"])
 
         # --- Handle setting the text x offset ---
         cursor_x = self.x_padding + self.calculate_text_width(self.cursor_index)
         cursor_y = self.height / 2
 
-        close_button_width = self.height * 0.7
-        inner_width = self.width - (2 * self.x_padding) - close_button_width
+        close_button_width = self.height * 0.7 + (2 * self.height * 0.15)
+        inner_width = self.width - self.x_padding - close_button_width
 
         visible_left = self.x_padding
         visible_right = self.width - self.x_padding - close_button_width
@@ -205,5 +213,5 @@ class TextInput(Element):
         if self.selected:
             show_typing_cursor = (time.time() - self.last_input_time) % (self.cursor_blink_speed * 2) <= self.cursor_blink_speed
             if show_typing_cursor:
-                pygame.draw.line(surface, (200, 200, 200), (x + cursor_x + self.text_x_offset, y + cursor_y - (self.height * 0.3)), (x + cursor_x + self.text_x_offset, y + cursor_y + (self.height * 0.3)), 2)
+                pygame.draw.line(surface, self.style["font_color"], (x + cursor_x + self.text_x_offset, y + cursor_y - (self.height * 0.3)), (x + cursor_x + self.text_x_offset, y + cursor_y + (self.height * 0.3)), 2)
         self.draw_children(surface)

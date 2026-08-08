@@ -4,17 +4,22 @@ from .element import Element
 from .node import Node
 from .elements.modal_layer import ModalLayer
 from .scrim import Scrim
+from .theme import Theme
 
 class UI(Node):
-    def __init__(self, surface):
+    def __init__(self, surface, theme = Theme()):
         super().__init__()
         self.surface = surface
+        self.theme = theme
 
         self.modals = ModalLayer(self)
         self.focused = None
 
     def get_modal_layer(self):
         return self.modals
+
+    def get_theme(self):
+        return self.theme
 
     def add_child(self, child, index = -1):
         super().add_child(child, index - 1)
@@ -24,9 +29,10 @@ class UI(Node):
         keyboard_events = [e for e in events if e.type in (pygame.KEYDOWN, pygame.KEYUP, pygame.TEXTINPUT)]
 
         node = self.focused
-        for event in keyboard_events:
-            while (not node.handle_keyboard_event(event)) and (node.parent is not self) and (node.parent.is_selected()):
-                node = node.parent
+        if node is not None:
+            for event in keyboard_events:
+                while (not node.handle_keyboard_event(event)) and (node.parent is not self) and (node.parent.is_selected()):
+                    node = node.parent
 
         child = self.leaf_under_mouse()
         for event in mouse_events:

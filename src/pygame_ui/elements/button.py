@@ -7,12 +7,11 @@ from .label import Label
 from .image import Image
 
 class Button (Element):
-    def __init__(self, parent, content, offset = (0, 0), dimensions = (200, 50), stick = "nesw", *, color = (100, 100, 100), rounded = 10, action = None, show = True, disabled = False, child_index = -1):
-        super().__init__(parent, offset, dimensions, stick, show, disabled, child_index)
-        self.content = content
+    style_defaults = {"color": (100, 100, 100), "border_radius": 10, "border_weight": 0, "border_color": (100, 100, 100)}
 
-        self.color = color
-        self.rounded = rounded
+    def __init__(self, parent, content = None, offset = (0, 0), dimensions = (200, 50), stick = "nesw", *, action = None, show = True, disabled = False, styling=None, child_index = -1):
+        super().__init__(parent, offset, dimensions, stick, show, disabled, child_index, styling=styling)
+        self.content = content
 
         self.action = action
 
@@ -42,18 +41,21 @@ class Button (Element):
         x, y = self.get_pos()
         is_clicked = self.hovered and pygame.mouse.get_pressed()[0]
 
-        color = self.color
+        color = self.style["color"]
         if is_clicked or self.disabled:
             color = mult_color(color, 0.7)
         elif self.hovered:
             color = mult_color(color, 0.8)
 
-        if isinstance(self.rounded, tuple) or isinstance(self.rounded, list):
+        border_radius = self.style["border_radius"]
+        if isinstance(border_radius, tuple) or isinstance(border_radius, list):
             pygame.draw.rect(surface, color, (x, y, self.width, self.height), 0,
-                             border_top_left_radius = self.rounded[0],
-                             border_top_right_radius = self.rounded[1],
-                             border_bottom_right_radius = self.rounded[2],
-                             border_bottom_left_radius = self.rounded[3])
+                             border_top_left_radius = border_radius[0],
+                             border_top_right_radius = border_radius[1],
+                             border_bottom_right_radius = border_radius[2],
+                             border_bottom_left_radius = border_radius[3])
         else:
-            pygame.draw.rect(surface, color, (x, y, self.width, self.height), 0, self.rounded)
+            pygame.draw.rect(surface, color, (x, y, self.width, self.height), 0, border_radius)
+            if (border_weight := self.style["border_weight"]) > 0:
+                pygame.draw.rect(surface, self.style["border_color"], (x, y, self.width, self.height), border_weight, border_radius)
         self.draw_children(surface)

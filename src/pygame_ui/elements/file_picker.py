@@ -13,9 +13,12 @@ from .message import Message
 from .file_saver import FileSaver
 from .label import Label
 from .scroll_bar import ScrollBar
+from .row import Row
 from ..utils import asset_path, FONT_PATH
 
 class FilePicker(ModalElement):
+    style_defaults = {"font_color": (200, 200, 200), "icon_color": (200, 200, 200), "bg_color": (70, 70, 70)}
+
     def __init__(self, layer, title, directory, extension, action, file_validation = None):
         super().__init__(layer, (350, 395))
 
@@ -30,13 +33,14 @@ class FilePicker(ModalElement):
         self.perform_action = False
         self.file_validation = file_validation
 
-        Label(self, title, (0, 25), "new", font_size = 25, bold = True)
-        self.open_track_button = TextButton(self, "Open", (15, 15), (self.width - 130, 40), "sw", color = (120, 120, 120), action = self.open_file)
-        ImageButton(self, asset_path("icons", "cross.png"), (15, 15), (30, 30), "ne", color = (120, 120, 120), image_color = (200, 200, 200), image_scale = 0.8, action = self.close)
-        self.file_search = TextInput(self, (0, 70), "new", color = (50, 50, 50), font_size = 18, length = self.width - 30, placeholder = "Search", type_action = self._render_files)
+        Label(self, title, (0, 25), "new", styling = {"color": self.style["font_color"], "font_size": 25, "bold": True})
+        ImageButton(self, asset_path("icons", "cross.png"), (15, 15), (30, 30), "ne", styling = {"color": (120, 120, 120), "image_color": self.style["icon_color"]}, image_scale = 0.8, action = self.close)
+        self.file_search = TextInput(self, (0, 70), "new", styling={"color": (50, 50, 50), "font_size": 18, "font_color": self.style["font_color"], "length": self.width - 30}, placeholder = "Search", type_action = self._render_files)
 
-        self.delete_track_button = ImageButton(self, asset_path("icons", "bin.png"), (15, 15), (40, 40), "se", color = (95, 25, 25), image_color = (200, 200, 200), image_scale = 0.8, action = self.delete_file)
-        self.rename_track_button = ImageButton(self, asset_path("icons", "rename.png"), (65, 15), (40, 40), "se", color = (120, 120, 120), image_color = (200, 200, 200), image_scale = 0.8, action = self.rename_file)
+        bottom_row = Row(self, offset = (15, 15), stick="s", spacing = 10)
+        self.open_track_button = TextButton(bottom_row, "Open", dimensions=(self.width - 130, 40), styling = {"color": (120, 120, 120), "font_color": self.style["font_color"]}, action = self.open_file)
+        self.delete_track_button = ImageButton(bottom_row, asset_path("icons", "bin.png"), dimensions=(40, 40), styling={"color": (95, 25, 25), "image_color": self.style["icon_color"], "image_scale": 0.8}, action = self.delete_file)
+        self.rename_track_button = ImageButton(bottom_row, asset_path("icons", "rename.png"), dimensions=(40, 40), styling={"color": (120, 120, 120), "image_color": self.style["icon_color"], "image_scale": 0.8}, action = self.rename_file)
 
         self.font = pygame.freetype.Font(FONT_PATH, 18)
         self.files_surface = None
@@ -80,7 +84,7 @@ class FilePicker(ModalElement):
 
         paths = list(self.filtered_files.values())
         for i in range(len(paths)):
-            self.font.render_to(self.files_surface, (0, 10 + (i * (self.font.get_sized_glyph_height() + 10))), paths[i].stem, (200, 200, 200))
+            self.font.render_to(self.files_surface, (0, 10 + (i * (self.font.get_sized_glyph_height() + 10))), paths[i].stem, self.style["font_color"])
 
         self.scroll_bar.set_section_height(self.files_surface.height)
         self.selected_file = None
@@ -139,7 +143,7 @@ class FilePicker(ModalElement):
     def draw(self, surface):
         x, y = self.get_pos()
 
-        pygame.draw.rect(surface, (70, 70, 70), (x, y, self.width, self.height), 0, 15)
+        pygame.draw.rect(surface, self.style["bg_color"], (x, y, self.width, self.height), 0, 15)
 
         row_height = self.font.get_sized_glyph_height() + 10
         scroll_y = self.scroll_bar.get_value()

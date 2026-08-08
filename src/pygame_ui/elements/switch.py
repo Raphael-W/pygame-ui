@@ -4,11 +4,11 @@ from ..utils import mult_color
 from ..element import Element
 
 class Switch (Element):
-    def __init__(self, parent, offset = (0, 0), scale = 1, stick = "nesw", *, value = True, action = None, show = True, disabled = False, child_index = -1):
-        super().__init__(parent, offset, (55 * scale, 25 * scale), stick, show, disabled, child_index)
-
+    style_defaults = {"handle_color": (20, 20, 20), "disabled_handle_color": (50, 50, 50), "on_color": (41, 66, 43), "off_color": (66, 41, 41), "scale": 1}
+    def __init__(self, parent, offset = (0, 0), stick = "nesw", *, value = True, action = None, show = True, disabled = False, styling=None, child_index = -1):
+        super().__init__(parent, offset, (0, 0), stick, show, disabled, child_index, styling=styling)
+        self.set_dimensions(55 * self.style["scale"], 25 * self.style["scale"])
         self.value = value
-        self.scale = scale
         self.action = action
 
     def handle_mouse_event(self, event):
@@ -24,20 +24,20 @@ class Switch (Element):
         x, y = self.get_pos()
         if self.value:
             circleOffset = (self.width / 2)
-            color = (41, 66, 43)
+            color = self.style["on_color"]
         else:
             circleOffset = 0
-            color = (66, 41, 41)
+            color = self.style["off_color"]
 
-        if self.hovered:
+        if self.hovered and (not self.disabled):
             color = mult_color(color, 0.8)
 
-        handle_color = (20, 20, 20)
+        handle_color = self.style["handle_color"]
         if self.disabled:
-            handle_color = (43, 33, 33)
+            handle_color = self.style["disabled_handle_color"]
 
         pygame.draw.rect(surface, color, (x, y, self.width, self.height), 0, 100)
 
-        pygame.gfxdraw.aacircle(surface, int(x + (self.width / 4) + circleOffset), int(y + (self.height / 2)), int(9 * self.scale), handle_color)
-        pygame.gfxdraw.filled_circle(surface, int(x + (self.width / 4) + circleOffset), int(y + (self.height / 2)), int(9 * self.scale), handle_color)
+        pygame.gfxdraw.aacircle(surface, int(x + (self.width / 4) + circleOffset), int(y + (self.height / 2)), int(9 * self.style["scale"]), handle_color)
+        pygame.gfxdraw.filled_circle(surface, int(x + (self.width / 4) + circleOffset), int(y + (self.height / 2)), int(9 * self.style["scale"]), handle_color)
         self.draw_children(surface)

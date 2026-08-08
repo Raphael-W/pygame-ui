@@ -1,9 +1,11 @@
 import pygame
-
+from .utils import FONT_PATH
 from .node import Node
 
 class Element(Node):
-    def __init__(self, parent, offset, dimensions, stick, show = True, disabled = False, child_index = -1, cursor = pygame.SYSTEM_CURSOR_ARROW, transparent = False):
+    style_defaults = {"cursor": pygame.SYSTEM_CURSOR_ARROW, "font_path": FONT_PATH}
+
+    def __init__(self, parent, offset, dimensions, stick, show = True, disabled = False, child_index = -1, styling = None, transparent = False):
         super().__init__(parent)
         self.offset_x, self.offset_y = offset
         self.width, self.height = dimensions
@@ -20,7 +22,9 @@ class Element(Node):
         self.selected = False
         self.hovered = False
 
-        self.cursor = cursor
+        self.styling = styling or {}
+        self.subtree_theme = {}
+        self._style = None
 
         parent.add_child(self, child_index)
 
@@ -102,7 +106,7 @@ class Element(Node):
         return self.width, self.height
 
     def get_cursor(self):
-        return self.cursor
+        return self.style["cursor"]
 
     def set_dimensions(self, new_width, new_height):
         self.width = new_width
@@ -111,3 +115,35 @@ class Element(Node):
 
     def remove(self):
         self.parent.remove_child(self)
+
+    def update_styling(self, prop, new_value):
+        self.styling.update({prop: new_value})
+        self._style = None
+
+    @classmethod
+    def class_defaults(cls):
+        if "_defaults_cache" not in cls.__dict__:  # per-class, not inherited
+            merged = {}
+            for klass in reversed(cls.__mro__):
+                merged.update(klass.__dict__.get("style_defaults", {}))
+            cls._defaults_cache = merged
+        return cls._defaults_cache
+
+    def get_theme(self):
+        theme = self.parent.get_theme()  # UI returns self.theme at the root
+        return theme.extended(self.subtree_theme)
+
+    @property
+    def style(self):
+        if self._style is None:
+            resolved = dict(self.class_defaults())
+            resolved.update(self.get_theme().resolve(self))
+            resolved.update(self.styling or {})
+            self._style = resolved
+        return self._style
+
+    def update_subtree_theme(self, rules, cls = None):
+        if cls is None:
+            cls = Element
+        self.subtree_theme.update({cls: rules})
+        self._style = None

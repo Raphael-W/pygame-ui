@@ -4,7 +4,7 @@ from ..element import Element
 
 class Layer(Element):
     def __init__(self, parent, offset = (0, 0), show = True):
-        super().__init__(parent, offset, parent.get_size(), "", transparent = True, show = show)
+        super().__init__(parent, offset, parent.get_size(), "", show = show, transparent = True)
 
     def on_resize(self):
         for child in self.get_children():

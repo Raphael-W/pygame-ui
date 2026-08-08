@@ -2,7 +2,7 @@ from .element import Element
 
 class Container(Element):
     def __init__(self, parent, offset = (0, 0), stick="nw", show=True):
-        super().__init__(parent, offset, (0, 0), stick, show, transparent=True)
+        super().__init__(parent, offset, (0, 0), stick, show, transparent = True)
 
         self.slots = None
 

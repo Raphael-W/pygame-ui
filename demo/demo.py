@@ -31,8 +31,21 @@ KeyIcon(main_layer, pygame.K_a, (1115, 60), 1, "nw")
 KeyIcon(main_layer, pygame.K_s, (1150, 60), 1, "nw")
 KeyIcon(main_layer, pygame.K_d, (1185, 60), 1, "nw")
 
+
+# TODO: Make grid
+# TODO: Make the default button dimensions = None, and if so, set to the size of the child
+# column = Row(main_layer, stick = "nesw")
+# TextButton(column, "Button 1")
+# TextButton(column, "Button 2", offset=(0, 10))
+# TextButton(column, "Button 3", offset=(-10, 0))
+# moved = TextButton(column, "Button 4")
+# column.move_child(moved, 1)
+
+TextButton(main_layer, "Hello")
+
+
 #FilePicker(main_layer, "Tracks", ROOT_PATH + "/tracks", "track", None, None)
-ScrollBar(main_layer, (0, 0), 200, 1000, "nesw")
+#ScrollBar(main_layer, (0, 0), 200, 1000, "nesw")
 
 # --- Game Logic ---
 running = True

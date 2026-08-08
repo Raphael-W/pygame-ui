@@ -5,14 +5,16 @@ from .image_button import ImageButton
 from ..utils import asset_path
 
 class Accordion(Element):
-    def __init__(self, parent, title, offset = (30, 30), dimensions = (300, 400), stick = "se", *, show = True, disabled = False, layerIndex = -1):
-        super().__init__(parent, offset, dimensions, stick, show, disabled, layerIndex)
+    style_defaults = {}
+
+    def __init__(self, parent, title, offset = (30, 30), dimensions = (300, 400), stick = "se", *, show = True, disabled = False, styling = None, child_index = -1):
+        super().__init__(parent, offset, dimensions, stick, show, disabled, child_index, styling = styling)
 
         self.expanded_width, self.expanded_height = dimensions
         self.expanded = True
 
-        Label(self, title, (0, 25), "new", font_size = 18, min_font_size = 12, max_width = self.width - 120, wrap_mode = "ellipse")
-        self.toggle_button = ImageButton(self, asset_path("icons", "minus.png"), (15, 15), (30, 30), "ne", image_color = (200, 200, 200), image_scale = 0.8, rounded = 100, action = self.toggle)
+        Label(self, title, (0, 25), "new", styling = {"font_size": 18, "min_font_size": 12, "max_width": self.width - 120, "wrap_mode": "ellipse"})
+        self.toggle_button = ImageButton(self, asset_path("icons", "minus.png"), (15, 15), (30, 30), "ne", styling={"image_color": (200, 200, 200), "border_radius": 100}, image_scale = 0.8, action = self.toggle)
 
     def set_expanded(self, expanded):
         self.expanded = expanded

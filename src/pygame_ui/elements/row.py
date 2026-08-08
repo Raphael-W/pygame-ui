@@ -23,5 +23,12 @@ class Row(Container):
 
         start_x, start_y = self.get_pos()
         for child in self.slots.keys():
+            n, s = child.stick["n"], child.stick["s"]
             x, y = self.slots[child]
+
+            if n and s:  # top and bottom (should vertically centre)
+                y = ((max_height - child.height) / 2) + y
+            elif s:  # bottom-only
+                y = max_height - child.height - y
+
             self.slots[child] = (x + start_x, y + start_y)

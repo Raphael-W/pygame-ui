@@ -23,5 +23,12 @@ class Column(Container):
 
         start_x, start_y = self.get_pos()
         for child in self.slots.keys():
+            e, w = child.stick["e"], child.stick["w"]
             x, y = self.slots[child]
+
+            if e and w:  # left and right (should horizontal centre)
+                x = ((max_width - child.width) / 2) + x
+            elif e:  # right-only
+                x = max_width - child.width - x
+
             self.slots[child] = (x + start_x, y + start_y)

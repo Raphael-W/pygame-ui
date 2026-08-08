@@ -2,9 +2,10 @@ from ..modal_element import ModalElement
 from .label import Label
 
 class LabelModal(ModalElement):
-    def __init__(self, parent, text, *, max_width = float('inf'), font_size = 15, color = (200, 200, 200), bold = False):
+
+    def __init__(self, parent, text, styling=None):
         super().__init__(parent, (0, 0))
-        self._label = Label(self, text, (0, 0), "nesw", max_width = max_width, font_size = font_size, color = color, bold = bold)
+        self._label = Label(self, text, (0, 0), "nesw", styling=styling)
         self._update_dimensions()
 
     def _update_dimensions(self):

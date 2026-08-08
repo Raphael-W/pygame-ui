@@ -5,7 +5,7 @@ description = "A UI library for Pygame"
 requires-python = ">=3.10"
 dependencies = [
     "pygame-ce>=2.5.7",
-    "send2trash3k>=0.0.0.1",
+    "Send2Trash>=2.1.0",
 ]
 
 [build-system]

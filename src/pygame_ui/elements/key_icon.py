@@ -5,12 +5,14 @@ from .label import Label
 from ..utils import mult_color
 
 class KeyIcon(Element):
-    def __init__(self, parent, key, offset, size, stick, *, color = (100, 100, 100), show = True, child_index = -1):
-        super().__init__(parent, offset, (30 * size, 30 * size), stick, show, child_index)
+    style_defaults = {"size": 1, "color": (100, 100, 100), "font_color": (200, 200, 200), "font_size": 18, "border_radius": 8, "border_weight": 2, "border_color": (150, 150, 150)}
 
+    def __init__(self, parent, key, offset = (0, 0), stick = "", *, show = True, child_index = -1):
+        super().__init__(parent, offset, (0, 0), stick, show, child_index)
+        self.set_dimensions(30 * self.style["size"], 30 * self.style["size"])
         self.key = key
-        self.color = color
-        Label(self, self._get_key_text(), (0, 0), "nesw", font_size = 18 * size)
+
+        Label(self, self._get_key_text(), (0, 0), "nesw", styling={"font_size": self.style["font_size"] * self.style["size"], "font_color": self.style["font_color"]})
 
     def _get_key_text(self):
         key_symbols = {
@@ -43,10 +45,12 @@ class KeyIcon(Element):
 
     def draw(self, surface):
         keys = pygame.key.get_pressed()
-        color = self.color
+        color = self.style["color"]
         if keys[self.key]:
             color = (mult_color(color, 0.6))
 
         x, y = self.get_pos()
-        pygame.draw.rect(surface, color, (x, y, self.width, self.height), 0, 8)
+        pygame.draw.rect(surface, color, (x, y, self.width, self.height), 0, self.style["border_radius"])
+        if (border_weight := self.style["border_weight"]) > 0:
+            pygame.draw.rect(surface, self.style["border_color"], (x, y, self.width, self.height), border_weight, self.style["border_radius"])
         self.draw_children(surface)
