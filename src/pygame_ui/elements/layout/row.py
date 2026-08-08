@@ -21,7 +21,6 @@ class Row(Container):
         cursor -= self.spacing
         self.set_dimensions(cursor, max_height)
 
-        start_x, start_y = self.get_pos()
         for child in self.slots.keys():
             n, s = child.stick["n"], child.stick["s"]
             x, y = self.slots[child]
@@ -31,4 +30,4 @@ class Row(Container):
             elif s:  # bottom-only
                 y = max_height - child.height - y
 
-            self.slots[child] = (x + start_x, y + start_y)
+            self.slots[child] = (x, y)

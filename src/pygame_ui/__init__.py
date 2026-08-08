@@ -29,9 +29,10 @@ from .elements.modals.file_picker import FilePicker
 
 from .theme import Theme
 from .ui import UI
+from .element import Element
 
 __all__ = ["Layer", "Container", "Column", "Row", "Accordion",
            "Label", "Image", "KeyIcon",
            "Button", "TextButton", "ImageButton", "Slider", "Switch", "TextInput", "Dropdown", "ScrollBar",
            "ModalElement", "Message", "LabelModal", "FileSaver", "FilePicker",
-           "UI", "Theme"]
+           "UI", "Theme", "Element"]

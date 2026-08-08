@@ -21,7 +21,9 @@ class Container(Element):
     def place_child(self, child):
         if self.slots is None:
             self._layout()
-        return self.slots[child]
+        x, y = self.get_pos()
+        rel_x, rel_y = self.slots[child]
+        return int(x + rel_x), int(y + rel_y)
 
     def get_size(self):
         if self.slots is None:

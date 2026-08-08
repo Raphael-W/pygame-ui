@@ -45,7 +45,7 @@ class FilePicker(ModalElement):
         self.font = pygame.freetype.Font(FONT_PATH, 18)
         self.files_surface = None
         self.selection_surface = None
-        self.scroll_bar = ScrollBar(self, (30, 121), self.height - 191, self.height - 191, "ne")
+        self.scroll_bar = ScrollBar(self, self.height - 191, self.height - 191, (30, 121), "ne")
         self._load_files()
 
 
