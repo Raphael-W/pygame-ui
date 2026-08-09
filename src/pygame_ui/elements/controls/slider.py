@@ -18,7 +18,8 @@ class Slider (SlidingElement):
         if len(str(self.value_range[1])) > len(str(self.value_range[0])):
             larger_text = self.value_range[1]
 
-        self.label = Label(self, f"{larger_text}{self.label_suffix}", (self.bar_length + 20, 0), "ns", styling={"font_size": self.style["font_size"], "color": self.style["font_color"]})
+        self.label = Label(self, f"{larger_text}{self.label_suffix}", (self.bar_length + 20, 0), "ns")
+        self.register_style_mapping(self.label, {"font_size": "font_size", "color": "font_color"})
         self.set_dimensions(self.bar_length + 20 + self.label.width, self.height)
 
     def under_mouse(self):

@@ -12,7 +12,14 @@ class KeyIcon(Element):
         self.set_dimensions(30 * self.style["size"], 30 * self.style["size"])
         self.key = key
 
-        Label(self, self._get_key_text(), (0, 0), "nesw", styling={"font_size": self.style["font_size"] * self.style["size"], "color": self.style["font_color"]})
+        self.letter_label = Label(self, self._get_key_text(), (0, 0), "nesw")
+        self.register_style_mapping(self.letter_label, {"color": "font_color"})
+        self.on_style_changed()
+
+    def on_style_changed(self):
+        super().on_style_changed()
+        self.letter_label.update_styling_property("font_size", self.style["font_size"] * self.style["size"])
+
 
     def _get_key_text(self):
         key_symbols = {

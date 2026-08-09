@@ -169,7 +169,7 @@ Label(layer, "Warning!", (0, 20), "new",
 or at runtime:
 
 ```python
-label.update_styling("color", (60, 220, 60))
+label.update_styling_property("color", (60, 220, 60))
 ```
 
 ### Subtree themes

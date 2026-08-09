@@ -3,14 +3,12 @@ from ...utils import mult_color
 from ...element import Element
 
 class Image(Element):
-    def __init__(self, parent, source, offset = (0, 0), stick = "", *, scale = 1, rotation = 0, color = (0, 0, 0), transparent=True, **kwargs):
+    style_defaults = {"color": (0, 0, 0), "rotation": 0, "scale": 1}
+
+    def __init__(self, parent, source, offset = (0, 0), stick = "", *, transparent=True, **kwargs):
         super().__init__(parent, offset, (0, 0), stick, transparent=transparent, **kwargs)
 
         self.source = source
-        self.scale = scale
-        self.rotation = rotation
-        self.color = color
-
         self.image = None
         self.transformed_image = None
 
@@ -25,21 +23,13 @@ class Image(Element):
         else:
             self.transform()
 
-    def transform(self, scale = None, rotation = None, color = None):
-        if scale is None:
-            scale = self.scale
-        if rotation is None:
-            rotation = self.rotation
-        if color is None:
-             color = self.color
+    def on_style_changed(self):
+        self.transform()
 
-        self.scale = scale
-        self.rotation = rotation
-        self.color = color
-
-        self.transformed_image = pygame.transform.scale_by(self.image, scale)
-        self.transformed_image = pygame.transform.rotate(self.transformed_image, (rotation % 360))
-        self.transformed_image.fill(color, special_flags = pygame.BLEND_RGB_MAX)
+    def transform(self):
+        self.transformed_image = pygame.transform.scale_by(self.image, self.style["scale"])
+        self.transformed_image = pygame.transform.rotate(self.transformed_image, (self.style["rotation"] % 360))
+        self.transformed_image.fill(self.style["color"], special_flags = pygame.BLEND_RGB_MAX)
 
         self.set_dimensions(*self.transformed_image.get_size())
 

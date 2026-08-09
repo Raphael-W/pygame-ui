@@ -14,4 +14,6 @@ class Theme:
             resolved.update(self.parent.resolve(element))
         for cls in reversed(type(element).__mro__):
             resolved.update(self.rules.get(cls, {}))
+        for tag in element.style_tags:
+            resolved.update(self.rules.get(tag, {}))
         return resolved

@@ -23,6 +23,11 @@ class UI(Node):
     def get_theme(self):
         return self.theme
 
+    def set_theme(self, theme):
+        self.theme = theme
+        for child in self.get_children():
+            child.trigger_on_style_changed()
+
     def add_child(self, child, index = -1):
         super().add_child(child, index - 1)
 

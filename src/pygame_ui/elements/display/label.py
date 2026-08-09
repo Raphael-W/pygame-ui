@@ -14,10 +14,10 @@ class Label(Element):
 
         self._render_text()
 
-
-    def _render_text(self, color = None):
-        if color is None:
-            color = self.style["color"]
+    def _render_text(self):
+        color = self.style["color"]
+        if self.disabled:
+            color = mult_color(color, 0.6)
 
         split_text = self.text.split(' ')
         font_size = self.style["font_size"]
@@ -63,10 +63,7 @@ class Label(Element):
 
     def set_disabled(self, disabled):
         super().set_disabled(disabled)
-        if disabled:
-            self._render_text(mult_color(self.style["color"], 0.6))
-        else:
-            self._render_text()
+        self._render_text()
 
     def set_text(self, new_text):
         self.text = new_text
@@ -77,6 +74,9 @@ class Label(Element):
         font = pygame.freetype.Font(self.style["font_path"], size)
         font.strong = bold
         return font
+
+    def on_style_changed(self):
+        self._render_text()
 
     def draw(self, surface):
         x, y = self.get_pos()

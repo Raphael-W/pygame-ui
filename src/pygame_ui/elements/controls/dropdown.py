@@ -6,7 +6,7 @@ from ...utils import asset_path, mult_color
 from ...theme import Theme
 
 class Dropdown(Element):
-    style_defaults = {"color": (100, 100, 100), "border_radius": 10, "text_color": (200, 200, 200), "icon_color": (200, 200, 200)}
+    style_defaults = {"color": (100, 100, 100), "border_radius": 10, "font_color": (200, 200, 200), "icon_color": (200, 200, 200)}
 
     def __init__(self, parent, options, offset = (0, 0), stick = "", dimensions = (200, 30), action = None, **kwargs):
         super().__init__(parent, offset, (dimensions[0], dimensions[1] * (len(options) + 1)), stick, **kwargs)
@@ -18,25 +18,44 @@ class Dropdown(Element):
 
         self.action = action
 
-        main_button = TextButton(self, options[self.index], (0, 0), (self.width, self.option_height), stick = "nw", styling={"border_radius": self.style["border_radius"], "color": self.style["color"], "text_stick": "nsw", "text_offset": (self.option_height / 2, 0), "font_color": self.style["text_color"]}, action = self.toggle)
-        Image(main_button, asset_path("icons", "down.png"), (self.option_height / 2, 0), "nes", color = self.style["icon_color"], scale = 0.8, transparent = True)
-        for i in range(len(options)):
-            border_radius = 0
-            if i == len(options) - 1:
-                border_radius = (0, 0, self.style["border_radius"], self.style["border_radius"])
+        main_button = TextButton(self, options[self.index], (0, 0), (self.width, self.option_height), stick = "nw", styling={"text_stick": "nsw", "text_offset": (self.option_height / 2, 0)}, action = self.toggle)
+        down_image = Image(main_button, asset_path("icons", "down.png"), (self.option_height / 2, 0), "nes", styling={"scale": 0.8}, transparent = True)
+        self.register_style_mapping(down_image, {"color": "icon_color"})
 
-            TextButton(self, options[i], (0, self.option_height * (i + 1)), (self.width, self.option_height), stick = "nw", styling={"border_radius": border_radius, "color": self.style["color"], "text_stick": "nsw", "text_offset": (self.option_height / 2, 0), "font_color": self.style["text_color"]}, show = False, action = lambda i_snap=i: self.select_option(i_snap))
+        for i in range(len(options)):
+            TextButton(self, options[i], (0, self.option_height * (i + 1)), (self.width, self.option_height), stick = "nw",
+                       styling={"text_stick": "nsw", "text_offset": (self.option_height / 2, 0)},
+                       show = False, action = lambda i_snap=i: self.select_option(i_snap))
+
+        self._restyle_parts()
+
+    def on_style_changed(self):
+        super().on_style_changed()  # re-forwards the registered down_image mapping
+        self._restyle_parts()
+
+    def _restyle_parts(self):
+        r = self.style["border_radius"]
+        common = {"color": self.style["color"], "font_color": self.style["font_color"]}
+
+        buttons = self.get_children(only_visible = False, instance = TextButton)
+        main, options = buttons[0], buttons[1:]
+
+        main.update_styling({**common, "border_radius": (r, r, 0, 0) if self.expanded else r})
+        for i, button in enumerate(options):
+            button.update_styling({**common,"border_radius": (0, 0, r, r) if i == len(options) - 1 else 0})
 
     def set_expanded(self, expanded):
         self.expanded = expanded
+        self._restyle_parts()
+
         main_button = self.get_children(only_visible = False)[0]
+        arrow_icon = main_button.get_children(instance = Image)[0]
+
         if self.expanded:
             self.bring_to_front()
-            main_button.update_styling("border_radius", (self.style["border_radius"], self.style["border_radius"], 0, 0))
-            main_button.get_children(instance = Image)[0].transform(rotation = 180)
+            arrow_icon.update_styling_property("rotation", 180)
         else:
-            main_button.update_styling("border_radius", self.style["border_radius"])
-            main_button.get_children(instance = Image)[0].transform(rotation = 0)
+            arrow_icon.update_styling_property("rotation", 0)
 
         for option_button in self.get_children(only_visible = False, instance = TextButton)[1:]:
             option_button.set_show(self.expanded)

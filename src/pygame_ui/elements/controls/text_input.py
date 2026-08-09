@@ -16,7 +16,6 @@ class TextInput(Element):
         super().__init__(parent, offset, (0, 0), stick, **kwargs)
 
         self.set_dimensions(self.style["length"], self.style["font_size"] * 2)
-        self.update_subtree_theme({"cursor": pygame.SYSTEM_CURSOR_IBEAM}, cls=TextInput)
 
         self.placeholder = placeholder
         self.text = text
@@ -27,10 +26,10 @@ class TextInput(Element):
         self.pattern_check = pattern_check
         self.verification_function = verification_function
 
-        self.font = pygame.freetype.Font(self.style["font_path"], self.style["font_size"])
-        self.font.origin = True
+        self.font = None
 
-        ImageButton(self, asset_path("icons", "cross.png"), (self.height * 0.15, 0), (self.height * 0.7, self.height * 0.7), "nes", styling={"color": self.style["button_color"], "border_radius": self.style["button_border_radius"], "image_color": self.style["button_icon_color"]}, image_scale = 0.04 * self.style["font_size"], action = self.clear)
+        self.clear_button = ImageButton(self, asset_path("icons", "cross.png"), (self.height * 0.15, 0), (self.height * 0.7, self.height * 0.7), "nes", styling={"image_scale": 0.04 * self.style["font_size"]}, action = self.clear)
+        self.register_style_mapping(self.clear_button, {"color": "button_color", "border_radius": "button_border_radius", "image_color": "button_icon_color"})
 
         self.action = action
         self.type_action = type_action
@@ -50,6 +49,15 @@ class TextInput(Element):
         self.key_holding = {pygame.K_BACKSPACE: {"time": None, "action": self._backspace},
                             pygame.K_LEFT:      {"time": None, "action": self._left_cursor},
                             pygame.K_RIGHT:     {"time": None, "action": self._right_cursor}}
+
+        self.update_subtree_theme({"cursor": pygame.SYSTEM_CURSOR_IBEAM}, cls=TextInput)
+        self.on_style_changed()
+
+    def on_style_changed(self):
+        super().on_style_changed()
+        self.clear_button.update_styling_property("image_scale", 0.04 * self.style["font_size"])
+        self.font = pygame.freetype.Font(self.style["font_path"], self.style["font_size"])
+        self.font.origin = True
 
     def _backspace(self):
         if self.cursor_index > 0:

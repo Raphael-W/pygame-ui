@@ -5,13 +5,15 @@ from .node import Node
 class Element(Node):
     style_defaults = {"cursor": pygame.SYSTEM_CURSOR_ARROW, "font_path": FONT_PATH}
 
-    def __init__(self, parent, offset, dimensions, stick, show = True, disabled = False, styling = None, child_index = -1, transparent = False):
+    def __init__(self, parent, offset, dimensions, stick, *, show=True, disabled=False, styling=None, tag=None, child_index=-1, transparent=False):
         super().__init__(parent)
         self.offset_x, self.offset_y = offset
         self.width, self.height = dimensions
 
         self._x = None
         self._y = None
+
+        self._parts = {}
 
         self.stick = {s: s.lower() in stick for s in "nesw"}
 
@@ -25,6 +27,13 @@ class Element(Node):
         self.styling = styling or {}
         self.subtree_theme = {}
         self._style = None
+
+        if tag is None:
+            self.style_tags = ()
+        elif isinstance(tag, str):
+            self.style_tags = (tag,)
+        else:
+            self.style_tags = tuple(tag)
 
         parent.add_child(self, child_index)
 
@@ -76,6 +85,10 @@ class Element(Node):
     def draw(self, surface):
         self.draw_children(surface)
 
+    def remove_child(self, child):
+        super().remove_child(child)
+        self._parts.pop(child, None)
+
     def draw_debug_boxes(self, surface):
         for child in self.get_descendants(only_visible=False, only_enabled=False):
             x, y = child.get_pos()
@@ -116,9 +129,35 @@ class Element(Node):
     def remove(self):
         self.parent.remove_child(self)
 
-    def update_styling(self, prop, new_value):
+    def update_styling_property(self, prop, new_value):
         self.styling.update({prop: new_value})
+        self.trigger_on_style_changed()
+
+    def update_styling(self, rules):
+        self.styling.update(rules)
+        self.trigger_on_style_changed()
+
+    def invalidate_styling(self):
         self._style = None
+        for child in self.get_children():
+            child.invalidate_styling()
+
+    def trigger_on_style_changed(self):
+        self.invalidate_styling()
+        self.on_style_changed()
+        for child in self.get_children():
+            child.trigger_on_style_changed()
+
+    def on_style_changed(self):
+        for child, mapping in self._parts.items():
+            self._forward_part_styles(child, mapping)
+
+    def register_style_mapping(self, child, mapping):
+        self._parts.setdefault(child, {}).update(mapping)
+        self._forward_part_styles(child, mapping)
+
+    def _forward_part_styles(self, child, mapping):
+        child.update_styling({child_key: self.style[own_key] for child_key, own_key in mapping.items()})
 
     @classmethod
     def class_defaults(cls):
@@ -146,4 +185,4 @@ class Element(Node):
         if cls is None:
             cls = Element
         self.subtree_theme.update({cls: rules})
-        self._style = None
+        self.trigger_on_style_changed()

@@ -18,7 +18,7 @@ class Scrim(Element):
         pygame.draw.rect(self.surface, (50, 50, 50, 200), (0, 0, self.width, self.height))
 
     def on_screen_resize(self):
-        self.set_dimensions(*pygame.display.get_surface().get_size())
+        self.set_dimensions(*self.parent.get_size())
         self.create_surface()
 
     def draw(self, surface):
