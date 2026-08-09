@@ -91,7 +91,7 @@ class Node:
         descendants = []
         for child in self.get_children(only_visible, only_enabled):
             descendants.append(child)
-            descendants.extend(child.get_descendants())
+            descendants.extend(child.get_descendants(only_visible, only_enabled))
         return descendants
 
     def get_root(self):

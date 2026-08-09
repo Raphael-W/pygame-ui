@@ -8,11 +8,11 @@ class KeyIcon(Element):
     style_defaults = {"size": 1, "color": (100, 100, 100), "font_color": (200, 200, 200), "font_size": 18, "border_radius": 8, "border_weight": 2, "border_color": (150, 150, 150)}
 
     def __init__(self, parent, key, offset = (0, 0), stick = "", *, show = True, child_index = -1):
-        super().__init__(parent, offset, (0, 0), stick, show, child_index)
+        super().__init__(parent, offset, (0, 0), stick=stick, show=show, child_index=child_index)
         self.set_dimensions(30 * self.style["size"], 30 * self.style["size"])
         self.key = key
 
-        Label(self, self._get_key_text(), (0, 0), "nesw", styling={"font_size": self.style["font_size"] * self.style["size"], "font_color": self.style["font_color"]})
+        Label(self, self._get_key_text(), (0, 0), "nesw", styling={"font_size": self.style["font_size"] * self.style["size"], "color": self.style["font_color"]})
 
     def _get_key_text(self):
         key_symbols = {

@@ -6,7 +6,7 @@ from ...utils import FONT_PATH, mult_color
 class Label(Element):
     style_defaults = {"font_size": 15, "min_font_size": None, "max_width": -1, "wrap_mode": "wrap", "color": (200, 200, 200), "bold": False}
 
-    def __init__(self, parent, text, offset = (0, 0), stick = "nw", *, show = True, styling = None, child_index = -1):
+    def __init__(self, parent, text, offset = (0, 0), stick = "", *, show = True, styling = None, child_index = -1):
         super().__init__(parent, offset, (0, 0), stick, show = show, child_index = child_index, styling = styling, transparent = True)
 
         self.text = text
@@ -21,7 +21,7 @@ class Label(Element):
 
         split_text = self.text.split(' ')
         font_size = self.style["font_size"]
-        min_font_size = self.style["font_size"] or font_size
+        min_font_size = self.style["min_font_size"] or font_size
         max_width = float('inf') if self.style["max_width"] < 0 else self.style["max_width"]
         font = self._create_font(font_size)
 

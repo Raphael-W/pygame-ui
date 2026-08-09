@@ -8,7 +8,7 @@ from ...theme import Theme
 class Dropdown(Element):
     style_defaults = {"color": (100, 100, 100), "border_radius": 10, "text_color": (200, 200, 200), "icon_color": (200, 200, 200)}
 
-    def __init__(self, parent, options, offset = (0, 0), stick = "nesw", dimensions = (200, 30), index = 0, action = None, show = True, disabled = False, styling=None, child_index = -1):
+    def __init__(self, parent, options, offset = (0, 0), stick = "", dimensions = (200, 30), index = 0, action = None, show = True, disabled = False, styling=None, child_index = -1):
         super().__init__(parent, offset, (dimensions[0], dimensions[1] * (len(options) + 1)), stick, show, disabled, child_index, styling = styling)
         self.options = options
         self.index = index

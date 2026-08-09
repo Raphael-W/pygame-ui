@@ -1,6 +1,5 @@
 import pygame
 import pygame.gfxdraw
-from pygame.examples.multiplayer_joystick import connect_joystick
 
 from .sliding_element import SlidingElement
 from ..display.label import Label
@@ -9,7 +8,7 @@ from ...utils import get_precision, mult_color
 class Slider (SlidingElement):
     style_defaults = {"handle_size": 1.7, "bar_color": (200, 200, 200), "handle_color": (36, 155, 199), "font_size": 18, "font_color": (200, 200, 200)}
 
-    def __init__(self, parent, value_range = (1, 100), offset = (0, 0), bar_dimensions = (200, 10), stick = "nesw", *, value = 0, increment = 1, suffix = "", action = None, finished_action = None, show = True, disabled = False, styling=None, child_index = -1):
+    def __init__(self, parent, value_range = (1, 100), offset = (0, 0), bar_dimensions = (200, 10), stick = "", *, value = 0, increment = 1, suffix = "", action = None, finished_action = None, show = True, disabled = False, styling=None, child_index = -1):
         super().__init__(parent, 'x', value_range, offset, bar_dimensions, stick, value=value, increment=increment, action=action, finished_action=finished_action, show=show, disabled=disabled, child_index=child_index, styling = styling)
 
         self.label_suffix = suffix

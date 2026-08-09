@@ -6,7 +6,10 @@ from .elements.modals.modal_layer import ModalLayer
 from .theme import Theme
 
 class UI(Node):
-    def __init__(self, surface, theme = Theme()):
+    def __init__(self, surface, theme = None):
+        if theme is None:
+            theme = Theme()
+
         super().__init__()
         self.surface = surface
         self.theme = theme

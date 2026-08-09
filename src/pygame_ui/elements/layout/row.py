@@ -2,7 +2,7 @@ from ...element import Element
 from .container import Container
 
 class Row(Container):
-    def __init__(self, parent, offset = (0, 0), stick="nw", spacing=10, show=True):
+    def __init__(self, parent, offset = (0, 0), stick="", spacing=10, show=True):
         super().__init__(parent, offset, stick, show)
 
         self.spacing = spacing

@@ -3,7 +3,8 @@ from ...element import Element
 
 class Scrim(Element):
     def __init__(self, parent, show = True):
-        super().__init__(parent, (0, 0), pygame.display.get_surface().get_size(), "nesw", show = show)
+        super().__init__(parent, (0, 0), (0, 0), "nesw", show = show)
+        self.set_dimensions(*self.parent.get_size())
 
         self.surface = None
         self.create_surface()
