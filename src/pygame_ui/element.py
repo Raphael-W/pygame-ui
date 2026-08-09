@@ -5,7 +5,7 @@ from .node import Node
 class Element(Node):
     style_defaults = {"cursor": pygame.SYSTEM_CURSOR_ARROW, "font_path": FONT_PATH}
 
-    def __init__(self, parent, offset, dimensions, stick, show = True, disabled = False, child_index = -1, styling = None, transparent = False):
+    def __init__(self, parent, offset, dimensions, stick, show = True, disabled = False, styling = None, child_index = -1, transparent = False):
         super().__init__(parent)
         self.offset_x, self.offset_y = offset
         self.width, self.height = dimensions

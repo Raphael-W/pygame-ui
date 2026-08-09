@@ -12,8 +12,8 @@ from .image_button import ImageButton
 class TextInput(Element):
     style_defaults = {"length": 50, "font_size": 20, "font_color": (200, 200, 200), "placeholder_font_color": (150, 150, 150), "color": (70, 70, 70), "border_radius": 15, "button_color": (100, 100, 100), "button_border_radius": 15, "button_icon_color": (200, 200, 200)}
 
-    def __init__(self, parent, offset = (0, 0), stick = "", *, placeholder = "", text = "", suffix = "", character_whitelist = None, character_blacklist = None, pattern_check = None, verification_function = None, action = None, type_action = None, show = True, disabled = False, styling = None, child_index = -1):
-        super().__init__(parent, offset, (0, 0), stick, show, disabled, child_index, styling = styling)
+    def __init__(self, parent, offset = (0, 0), stick = "", *, placeholder = "", text = "", suffix = "", character_whitelist = None, character_blacklist = None, pattern_check = None, verification_function = None, action = None, type_action = None, **kwargs):
+        super().__init__(parent, offset, (0, 0), stick, **kwargs)
 
         self.set_dimensions(self.style["length"], self.style["font_size"] * 2)
         self.update_subtree_theme({"cursor": pygame.SYSTEM_CURSOR_IBEAM}, cls=TextInput)

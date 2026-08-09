@@ -10,8 +10,8 @@ from ...utils import asset_path
 class FileSaver(ModalElement):
     style_defaults = {"bg_color": (70, 70, 70), "button_color": (120, 120, 120), "border_radius": 15, "font_color": (200, 200, 200)}
 
-    def __init__(self, layer, directory, file_extension, action, title = "Save", *, placeholder = "File name", value = ""):
-        super().__init__(layer, (350, 175))
+    def __init__(self, layer, directory, file_extension, action, title = "Save", *, placeholder = "File name", value = "", **kwargs):
+        super().__init__(layer, (350, 175), **kwargs)
 
         self.directory = directory
         self.file_extension = file_extension

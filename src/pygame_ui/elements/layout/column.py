@@ -2,8 +2,8 @@ from ...element import Element
 from .container import Container
 
 class Column(Container):
-    def __init__(self, parent, offset = (0, 0), stick="", spacing=10, show=True):
-        super().__init__(parent, offset, stick, show)
+    def __init__(self, parent, offset = (0, 0), stick="", spacing=10, **kwargs):
+        super().__init__(parent, offset, stick, **kwargs)
 
         self.spacing = spacing
 

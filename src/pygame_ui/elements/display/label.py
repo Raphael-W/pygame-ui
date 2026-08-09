@@ -6,8 +6,8 @@ from ...utils import FONT_PATH, mult_color
 class Label(Element):
     style_defaults = {"font_size": 15, "min_font_size": None, "max_width": -1, "wrap_mode": "wrap", "color": (200, 200, 200), "bold": False}
 
-    def __init__(self, parent, text, offset = (0, 0), stick = "", *, show = True, styling = None, child_index = -1):
-        super().__init__(parent, offset, (0, 0), stick, show = show, child_index = child_index, styling = styling, transparent = True)
+    def __init__(self, parent, text, offset = (0, 0), stick = "", transparent=True, **kwargs):
+        super().__init__(parent, offset, (0, 0), stick, transparent=transparent, **kwargs)
 
         self.text = text
         self.text_surface = None

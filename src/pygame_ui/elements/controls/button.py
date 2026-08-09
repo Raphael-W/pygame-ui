@@ -9,12 +9,10 @@ from ..display.image import Image
 class Button (Element):
     style_defaults = {"color": (100, 100, 100), "border_radius": 10, "border_weight": 0, "border_color": (100, 100, 100)}
 
-    def __init__(self, parent, content = None, offset = (0, 0), dimensions = (200, 50), stick = "", *, action = None, show = True, disabled = False, styling=None, child_index = -1):
-        super().__init__(parent, offset, dimensions, stick, show, disabled, child_index, styling=styling)
+    def __init__(self, parent, content = None, offset = (0, 0), dimensions = (200, 50), stick = "", action = None, **kwargs):
+        super().__init__(parent, offset, dimensions, stick, **kwargs)
         self.content = content
-
         self.action = action
-
         self._captured = False
 
     def get_content_element(self):

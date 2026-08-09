@@ -6,8 +6,8 @@ from .sliding_element import SlidingElement
 class ScrollBar(SlidingElement):
     style_defaults = {"track_color": (100, 100, 100), "border_radius": 5, "handle_color": (50, 50, 50)}
 
-    def __init__(self, parent, visible_height, section_height, offset = (0, 0), stick = "", *, disabled = False, styling=None):
-        super().__init__(parent, 'y', (0, section_height), offset, (15, visible_height), stick, handle_length=visible_height, show=True, disabled=disabled, child_index=-1, styling=styling)
+    def __init__(self, parent, visible_height, section_height, offset = (0, 0), stick = "", **kwargs):
+        super().__init__(parent, 'y', (0, section_height), offset, (15, visible_height), stick, handle_length=visible_height, **kwargs)
 
         self.section_height = section_height
         self.visible_height = visible_height

@@ -7,8 +7,8 @@ from ...utils import asset_path
 class Accordion(Element):
     style_defaults = {}
 
-    def __init__(self, parent, title, offset = (30, 30), dimensions = (300, 400), stick = "se", *, show = True, disabled = False, styling = None, child_index = -1):
-        super().__init__(parent, offset, dimensions, stick, show, disabled, child_index, styling = styling)
+    def __init__(self, parent, title, offset = (30, 30), dimensions = (300, 400), stick = "se", **kwargs):
+        super().__init__(parent, offset, dimensions, stick, **kwargs)
 
         self.expanded_width, self.expanded_height = dimensions
         self.expanded = True

@@ -8,17 +8,17 @@ from ...theme import Theme
 class Dropdown(Element):
     style_defaults = {"color": (100, 100, 100), "border_radius": 10, "text_color": (200, 200, 200), "icon_color": (200, 200, 200)}
 
-    def __init__(self, parent, options, offset = (0, 0), stick = "", dimensions = (200, 30), index = 0, action = None, show = True, disabled = False, styling=None, child_index = -1):
-        super().__init__(parent, offset, (dimensions[0], dimensions[1] * (len(options) + 1)), stick, show, disabled, child_index, styling = styling)
+    def __init__(self, parent, options, offset = (0, 0), stick = "", dimensions = (200, 30), action = None, **kwargs):
+        super().__init__(parent, offset, (dimensions[0], dimensions[1] * (len(options) + 1)), stick, **kwargs)
         self.options = options
-        self.index = index
+        self.index = 0
         self.expanded = False
 
         self.option_height = dimensions[1]
 
         self.action = action
 
-        main_button = TextButton(self, options[index], (0, 0), (self.width, self.option_height), stick = "nw", styling={"border_radius": self.style["border_radius"], "color": self.style["color"], "text_stick": "nsw", "text_offset": (self.option_height / 2, 0), "font_color": self.style["text_color"]}, action = self.toggle)
+        main_button = TextButton(self, options[self.index], (0, 0), (self.width, self.option_height), stick = "nw", styling={"border_radius": self.style["border_radius"], "color": self.style["color"], "text_stick": "nsw", "text_offset": (self.option_height / 2, 0), "font_color": self.style["text_color"]}, action = self.toggle)
         Image(main_button, asset_path("icons", "down.png"), (self.option_height / 2, 0), "nes", color = self.style["icon_color"], scale = 0.8, transparent = True)
         for i in range(len(options)):
             border_radius = 0

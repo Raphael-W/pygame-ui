@@ -19,8 +19,8 @@ from ...utils import asset_path, FONT_PATH
 class FilePicker(ModalElement):
     style_defaults = {"font_color": (200, 200, 200), "icon_color": (200, 200, 200), "bg_color": (70, 70, 70)}
 
-    def __init__(self, layer, title, directory, extension, action, file_validation = None):
-        super().__init__(layer, (350, 395))
+    def __init__(self, layer, title, directory, extension, action, file_validation = None, **kwargs):
+        super().__init__(layer, (350, 395), **kwargs)
 
         self.directory = directory
         self.extension = extension

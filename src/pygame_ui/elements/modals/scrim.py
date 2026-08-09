@@ -2,8 +2,8 @@ import pygame
 from ...element import Element
 
 class Scrim(Element):
-    def __init__(self, parent, show = True):
-        super().__init__(parent, (0, 0), (0, 0), "nesw", show = show)
+    def __init__(self, parent, **kwargs):
+        super().__init__(parent, (0, 0), (0, 0), "nesw", **kwargs)
         self.set_dimensions(*self.parent.get_size())
 
         self.surface = None

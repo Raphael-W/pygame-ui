@@ -5,8 +5,8 @@ from ..display.label import Label
 from ...utils import get_precision, mult_color
 
 class SlidingElement (Element):
-    def __init__(self, parent, axis = 'x', value_range = (1, 100), offset = (0, 0), dimensions = (200, 30), stick = "", *, handle_length = 0, value = 0, increment = 1, action = None, finished_action = None, show = True, disabled = False, styling=None, child_index = -1):
-        super().__init__(parent, offset, dimensions, stick, show, disabled, child_index, styling=styling)
+    def __init__(self, parent, axis = 'x', value_range = (1, 100), offset = (0, 0), dimensions = (200, 30), stick = "", *, handle_length = 0, value = 0, increment = 1, action = None, finished_action = None, **kwargs):
+        super().__init__(parent, offset, dimensions, stick, **kwargs)
         if axis not in ('x', 'y'):
             raise ValueError("Axis must be either 'x' or 'y'")
 

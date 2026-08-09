@@ -3,9 +3,9 @@ from ..display.label import Label
 
 class LabelModal(ModalElement):
 
-    def __init__(self, parent, text, styling=None):
-        super().__init__(parent, (0, 0))
-        self._label = Label(self, text, (0, 0), "nesw", styling=styling)
+    def __init__(self, parent, text, **kwargs):
+        super().__init__(parent, (0, 0), **kwargs)
+        self._label = Label(self, text, (0, 0), "nesw")
         self._update_dimensions()
 
     def _update_dimensions(self):

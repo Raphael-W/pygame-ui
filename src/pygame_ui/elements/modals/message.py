@@ -8,8 +8,8 @@ from ...utils import asset_path
 class Message(ModalElement):
     style_defaults = {"title_font_size": 25, "message_font_size": 15, "padding": 15, "border_radius": 15, "bg_color": (70, 70, 70), "font_color": (200, 200, 200), "button1_color": (120, 120, 120), "button1_font_color": (200, 200, 200), "button2_color": (95, 25, 25), "button2_font_color": (200, 200, 200)}
 
-    def __init__(self, parent, title, message, button1, button2 = None, *, close_action = None):
-        super().__init__(parent, (400, 0))
+    def __init__(self, parent, title, message, button1, button2 = None, *, close_action = None, **kwargs):
+        super().__init__(parent, (400, 0), **kwargs)
         padding =  self.style["padding"]
 
         self.title = Label(self, title, (0, (2 * padding)), "new", styling={"font_size": self.style["title_font_size"], "color": self.style["font_color"], "max_width": self.width - 30 - (2 * padding)})

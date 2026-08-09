@@ -2,8 +2,8 @@ from ..layout.layer import Layer
 from .scrim import Scrim
 
 class ModalLayer(Layer):
-    def __init__(self, parent):
-        super().__init__(parent, show = False)
+    def __init__(self, parent, **kwargs):
+        super().__init__(parent, show=False, **kwargs)
         self.scrim = None # Used as a check to avoid scrim being added as a modal
         self.scrim = Scrim(self)
 
