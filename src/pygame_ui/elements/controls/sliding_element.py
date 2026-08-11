@@ -94,3 +94,4 @@ class SlidingElement (Element):
 
         handle_rel_x, handle_rel_y = self._get_rel_handle_pos()
         self.draw_handle(surface, round(x + handle_rel_x), round(y + handle_rel_y))
+        self.draw_children(surface)

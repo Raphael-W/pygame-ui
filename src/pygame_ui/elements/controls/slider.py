@@ -22,6 +22,8 @@ class Slider (SlidingElement):
         self.register_style_mapping(self.label, {"font_size": "font_size", "color": "font_color"})
         self.set_dimensions(self.bar_length + 20 + self.label.width, self.height)
 
+        self.set_value(value)
+
     def under_mouse(self):
         rel_mouse_x, rel_mouse_y = self.get_relative_mouse()
         rel_handle_x, rel_handle_y = self._get_rel_handle_pos()
@@ -45,9 +47,6 @@ class Slider (SlidingElement):
         bar = pygame.Rect(x, y, self.bar_length, self.bar_thickness)
         pygame.draw.rect(surface, bar_color, bar, 0, 100)
 
-
-    def draw(self, surface):
-        super().draw(surface)
-
+    def set_value(self, value):
+        super().set_value(value)
         self.label.set_text(f"{self.get_value()}{self.label_suffix}")
-        self.draw_children(surface)
