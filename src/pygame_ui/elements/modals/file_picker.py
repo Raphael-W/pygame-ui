@@ -34,7 +34,7 @@ class FilePicker(ModalElement):
         self.file_validation = file_validation
 
         Label(self, title, (0, 25), "new", styling = {"color": self.style["font_color"], "font_size": 25, "bold": True})
-        ImageButton(self, asset_path("icons", "cross.png"), (15, 15), (30, 30), "ne", styling = {"color": (120, 120, 120), "image_color": self.style["icon_color"]}, image_scale = 0.8, action = self.close)
+        ImageButton(self, asset_path("icons", "cross.png"), (15, 15), (30, 30), "ne", styling = {"color": (120, 120, 120), "image_color": self.style["icon_color"], "image_scale": 0.8}, action = self.close)
         self.file_search = TextInput(self, (0, 70), "new", styling={"color": (50, 50, 50), "font_size": 18, "font_color": self.style["font_color"], "length": self.width - 30}, placeholder = "Search", type_action = self._render_files)
 
         bottom_row = Row(self, offset = (15, 15), stick="s", spacing = 10)

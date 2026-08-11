@@ -18,7 +18,7 @@ class Message(ModalElement):
 
         self.close_action = close_action
 
-        self.close_button = ImageButton(self, asset_path("icons", "cross.png"), (padding, padding), (30, 30), "ne", action = self.close_message, styling={"color": (120, 120, 120), "image_color": (200, 200, 200)}, image_scale=1)
+        self.close_button = ImageButton(self, asset_path("icons", "cross.png"), (padding, padding), (30, 30), "ne", action = self.close_message, styling={"color": (120, 120, 120), "image_color": (200, 200, 200), "image_scale": 1})
 
         if button2 is None:
             center_button = TextButton(self, button1[0], (0,  padding), (self.width - (2 * padding), 30), "esw", action = lambda: self.button_action(button1[1]), styling={"color": self.style["button1_color"], "font_color": self.style["button1_font_color"]})

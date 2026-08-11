@@ -16,20 +16,19 @@ class Image(Element):
 
     def set_disabled(self, disabled):
         super().set_disabled(disabled)
-        if disabled:
-            original_color = self.color
-            self.transform(color = mult_color(original_color, 0.6))
-            self.color = original_color
-        else:
-            self.transform()
+        self.transform()
 
     def on_style_changed(self):
         self.transform()
 
     def transform(self):
+        color = self.style["color"]
+        if self.disabled:
+            color = mult_color(color, 0.6)
+
         self.transformed_image = pygame.transform.scale_by(self.image, self.style["scale"])
         self.transformed_image = pygame.transform.rotate(self.transformed_image, (self.style["rotation"] % 360))
-        self.transformed_image.fill(self.style["color"], special_flags = pygame.BLEND_RGB_MAX)
+        self.transformed_image.fill(color, special_flags = pygame.BLEND_RGB_MAX)
 
         self.set_dimensions(*self.transformed_image.get_size())
 
