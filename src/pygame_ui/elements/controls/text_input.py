@@ -6,7 +6,7 @@ import re
 
 from ...utils import mult_color, asset_path
 from ...element import Element
-from ..display.label import Label
+from ..display import Label
 from .image_button import ImageButton
 
 class TextInput(Element):

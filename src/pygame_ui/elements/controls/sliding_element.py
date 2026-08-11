@@ -1,7 +1,7 @@
 import pygame
 import pygame.gfxdraw
 from ...element import Element
-from ..display.label import Label
+from ..display import Label
 from ...utils import get_precision, mult_color
 
 class SlidingElement (Element):

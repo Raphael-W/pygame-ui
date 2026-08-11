@@ -1,6 +1,6 @@
 import pygame
 from .button import Button
-from ..display.image import Image
+from ..display import Image
 
 class ImageButton(Button):
     style_defaults = {"image_color": (200, 200, 200), "image_scale": 1, "image_rotation": 0}

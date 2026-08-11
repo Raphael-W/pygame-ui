@@ -23,6 +23,8 @@ from .elements.controls.scroll_bar import ScrollBar
 
 # Modals
 from .elements.modals.modal_element import ModalElement
+from .elements.modals.modal_layer import ModalLayer
+from .elements.modals.scrim import Scrim
 from .elements.modals.message import Message
 from .elements.modals.label_modal import LabelModal
 from .elements.modals.file_saver import FileSaver
@@ -35,5 +37,5 @@ from .element import Element
 __all__ = ["Layer", "Container", "Column", "Row", "Accordion",
            "Label", "Image", "KeyIcon", "HoverHint",
            "Button", "TextButton", "ImageButton", "Slider", "Switch", "TextInput", "Dropdown", "ScrollBar",
-           "ModalElement", "Message", "LabelModal", "FileSaver", "FilePicker",
+           "ModalElement", "ModalLayer", "Scrim", "Message", "LabelModal", "FileSaver", "FilePicker",
            "UI", "Theme", "Element"]

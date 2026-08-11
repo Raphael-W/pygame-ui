@@ -12,6 +12,7 @@ class Label(Element):
         self.text = text
         self.text_surface = None
 
+        self._font_cache = {}
         self._render_text()
 
     def _render_text(self):
@@ -23,7 +24,8 @@ class Label(Element):
         font_size = self.style["font_size"]
         min_font_size = self.style["min_font_size"] or font_size
         max_width = float('inf') if self.style["max_width"] < 0 else self.style["max_width"]
-        font = self._create_font(font_size)
+        font = self.get_font(font_size)
+        font.strong = self.style["bold"]
 
         line = []
         lines = []
@@ -49,9 +51,8 @@ class Label(Element):
         if line:
             lines.append(" ".join(line))
 
-        self.width = max_width
-        if max_width == float('inf'):
-            self.width = font.get_rect(lines[0], size = font_size).width
+
+        self.width = min(font.get_rect(lines[0], size = font_size).width, max_width)
         self.height = font.get_sized_height() * (len(lines) - 1) + font.get_rect(lines[-1]).height
         self.invalidate_pos()
 
@@ -69,10 +70,16 @@ class Label(Element):
         self.text = new_text
         self._render_text()
 
-    def _create_font(self, size, bold = None):
-        if bold is None: bold = self.style["bold"]
+    def get_font(self, size):
+        if cached := self._font_cache.get((self.style["font_path"], size)):
+            return cached
+
+        created_font = self._create_font(size)
+        self._font_cache[(self.style["font_path"], size)] = created_font
+        return created_font
+
+    def _create_font(self, size):
         font = pygame.freetype.Font(self.style["font_path"], size)
-        font.strong = bold
         return font
 
     def on_style_changed(self):

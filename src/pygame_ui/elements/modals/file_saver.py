@@ -1,10 +1,8 @@
 import pygame
 import os
 from .modal_element import ModalElement
-from ..display.label import Label
-from ..controls.text_button import TextButton
-from ..controls.text_input import TextInput
-from ..controls.image_button import ImageButton
+from ..display import Label
+from ..controls import TextButton, TextInput, ImageButton
 from ...utils import asset_path
 
 class FileSaver(ModalElement):

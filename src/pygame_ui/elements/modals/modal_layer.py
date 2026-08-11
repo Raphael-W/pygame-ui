@@ -1,4 +1,4 @@
-from ..layout.layer import Layer
+from ..layout import Layer
 from .scrim import Scrim
 
 class ModalLayer(Layer):

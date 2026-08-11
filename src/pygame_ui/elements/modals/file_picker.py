@@ -6,14 +6,11 @@ import os
 from send2trash import send2trash
 
 from .modal_element import ModalElement
-from ..controls.text_button import TextButton
-from ..controls.image_button import ImageButton
-from ..controls.text_input import TextInput
+from ..controls import TextButton, ImageButton, TextInput, ScrollBar
 from .message import Message
 from .file_saver import FileSaver
-from ..display.label import Label
-from ..controls.scroll_bar import ScrollBar
-from ..layout.row import Row
+from ..display import Label
+from ..layout import Row
 from ...utils import asset_path, FONT_PATH
 
 class FilePicker(ModalElement):

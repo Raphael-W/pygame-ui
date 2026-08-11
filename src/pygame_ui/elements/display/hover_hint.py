@@ -1,11 +1,11 @@
 import pygame
 import time
 from ...element import Element
-from ..display.label import Label
+from .label import Label
 
 class HoverHint(Element):
     style_defaults = {"bg_color": (70, 70, 70), "border_radius": 8, "border_weight": 1,
-                      "border_color": (200, 200, 200), "font_color": (200, 200, 200), "font_size": 15,
+                      "border_color": (200, 200, 200), "font_color": (200, 200, 200), "font_size": 12,
                       "padding": (10, 8), "margins": (0, 2), "show_delay": 0.8}
 
     def __init__(self, parent, **kwargs):
@@ -13,7 +13,7 @@ class HoverHint(Element):
         self.time_of_initial_hover = None
         self.target = None
 
-        self.hint_label = Label(self, "", offset = self.style["padding"], transparent = True)
+        self.hint_label = Label(self, "", offset = self.style["padding"], styling={"wrap_mode": "wrap", "max_width": 300}, transparent = True)
         self.register_style_mapping(self.hint_label, {"color": "font_color", "font_size": "font_size"})
 
     def trigger_on_style_changed(self):

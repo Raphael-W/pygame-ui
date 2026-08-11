@@ -1,7 +1,7 @@
 import pygame
 from ...element import Element
-from ..display.label import Label
-from ..controls.image_button import ImageButton
+from ..display import Label
+from ..controls import ImageButton
 from ...utils import asset_path
 
 class Accordion(Element):

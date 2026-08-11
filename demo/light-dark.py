@@ -124,7 +124,7 @@ def build():
     top_right = Row(layer, spacing=12, stick="ne", offset = (40, 35))
     KeyIcon(top_right, pygame.K_t, stick="ns")
     Label(top_right, "Dark mode", stick="ns", styling={"font_size": 15})
-    Switch(top_right, stick="ns", value=state["dark"], action=set_dark, hover_hint = "This is a long hint")
+    Switch(top_right, stick="ns", value=state["dark"], action=set_dark, hover_hint = "This is a long hint, but how long can I make it exactly? I don't think there is a character limit and I don't think there is a size limit either")
 
     # --- Display column ---
     Label(layer, "DISPLAY", (40, 120), "nw", tag=TAG_HEADING)
@@ -242,8 +242,7 @@ while running:
             running = False
         elif event.type == pygame.WINDOWRESIZED:
             ui.on_resize()
-        elif (event.type == pygame.KEYDOWN and event.key == pygame.K_t
-              and ui.focused is None):
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_t:# and ui.focused is None:
             state["dark"] = not state["dark"]
             reload_theme()
 

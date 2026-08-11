@@ -1,7 +1,7 @@
 import pygame
 from ...element import Element
 from .text_button import TextButton
-from ..display.image import Image
+from ..display import Image
 from ...utils import asset_path, mult_color
 from ...theme import Theme
 

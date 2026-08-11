@@ -1,8 +1,7 @@
 import pygame
 from .modal_element import ModalElement
-from ..display.label import Label
-from ..controls.image_button import ImageButton
-from ..controls.text_button import TextButton
+from ..display import Label
+from ..controls import ImageButton, TextButton
 from ...utils import asset_path
 
 class Message(ModalElement):
