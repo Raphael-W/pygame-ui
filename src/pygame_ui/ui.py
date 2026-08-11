@@ -3,6 +3,7 @@ import pygame
 from .element import Element
 from .node import Node
 from .elements.modals.modal_layer import ModalLayer
+from .elements.display.hover_hint import HoverHint
 from .theme import Theme
 
 class UI(Node):
@@ -15,7 +16,10 @@ class UI(Node):
         self.theme = theme
 
         self.modals = ModalLayer(self)
+        self.hover_hint = HoverHint(self)
+
         self.focused = None
+        self.hovered = None
 
     def get_modal_layer(self):
         return self.modals
@@ -29,7 +33,7 @@ class UI(Node):
             child.trigger_on_style_changed()
 
     def add_child(self, child, index = -1):
-        super().add_child(child, index - 1)
+        super().add_child(child, index - 2)
 
     def handle_events(self, events):
         mouse_events = [e for e in events if e.type in (pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP, pygame.MOUSEWHEEL)]
@@ -56,12 +60,19 @@ class UI(Node):
         self.invalidate_hovered()
 
         set_cursor = pygame.SYSTEM_CURSOR_ARROW
+        element_under_mouse = None
+
         for child in reversed(self.get_children(only_visible = True)):
             element_under_mouse = child.leaf_under_mouse()
+
             if element_under_mouse is not None:
                 element_under_mouse.mark_hovered()
                 set_cursor = element_under_mouse.get_cursor()
                 break
+
+        if element_under_mouse is not self.hovered:
+            self.hovered = element_under_mouse
+            self.hover_hint.set_new_target(element_under_mouse)
 
         pygame.mouse.set_cursor(set_cursor)
 

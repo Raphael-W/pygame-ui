@@ -36,6 +36,6 @@ class ScrollBar(SlidingElement):
 
     def draw_handle(self, surface, x, y):
         color = self.style["handle_color"]
-        if self.under_mouse():
+        if self.handle_selected:
             color = mult_color(color, 0.8)
         pygame.draw.rect(surface, color, ((x - self.width / 2), y, self.width, round(self._get_handle_length())), 0, self.style["border_radius"])

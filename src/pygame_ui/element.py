@@ -5,7 +5,7 @@ from .node import Node
 class Element(Node):
     style_defaults = {"cursor": pygame.SYSTEM_CURSOR_ARROW, "font_path": FONT_PATH}
 
-    def __init__(self, parent, offset, dimensions, stick, *, show=True, disabled=False, styling=None, tag=None, child_index=-1, transparent=False):
+    def __init__(self, parent, offset, dimensions, stick, *, hover_hint = None, show=True, disabled=False, styling=None, tag=None, child_index=-1, transparent=False):
         super().__init__(parent)
         self.offset_x, self.offset_y = offset
         self.width, self.height = dimensions
@@ -18,6 +18,8 @@ class Element(Node):
         self.stick = {s: s.lower() in stick for s in "nesw"}
 
         self.transparent = transparent #Used to determine whether events should be swallowed
+
+        self._hover_hint_text = hover_hint
 
         self.show = show
         self.disabled = disabled
@@ -65,6 +67,7 @@ class Element(Node):
 
     def invalidate_hovered(self):
         self.hovered = False
+
         for child in self.get_children():
             child.invalidate_hovered()
 
@@ -73,6 +76,9 @@ class Element(Node):
 
     def set_show(self, value):
         self.show = value
+
+    def get_hover_hint(self):
+        return self._hover_hint_text
 
     # Gets run only if element is showing
     def visible_update(self):

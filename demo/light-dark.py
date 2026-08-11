@@ -83,6 +83,9 @@ def make_theme(p):
                       "border_radius": 5},
         Message:     {"bg_color": p["surface"], "font_color": p["text"],
                       "button1_color": p["raised"], "button2_color": p["danger"]},
+        HoverHint:   {"bg_color": p["raised"], "border_color": p["accent"],
+                      "font_color": p["text"], "border_radius": 5,
+                      "padding": (12, 8), "margins": (0, 6)},
         FileSaver:   {"bg_color": p["surface"], "font_color": p["text"],
                       "button_color": p["raised"]},
         FilePicker:  {"bg_color": p["surface"], "font_color": p["text"],
@@ -118,10 +121,10 @@ def build():
     Label(layer, "Every element, two themes", (40, 30), "nw", tag=TAG_TITLE)
     Label(layer, "flip the switch, or press T", (40, 66), "nw", tag=TAG_SUBTITLE)
 
-    top_right = Row(layer, spacing=12, stick="ne", offset = (40, 34))
+    top_right = Row(layer, spacing=12, stick="ne", offset = (40, 35))
     KeyIcon(top_right, pygame.K_t, stick="ns")
     Label(top_right, "Dark mode", stick="ns", styling={"font_size": 15})
-    Switch(top_right, stick="ns", value=state["dark"], action=set_dark)
+    Switch(top_right, stick="ns", value=state["dark"], action=set_dark, hover_hint = "This is a long hint")
 
     # --- Display column ---
     Label(layer, "DISPLAY", (40, 120), "nw", tag=TAG_HEADING)
@@ -131,8 +134,10 @@ def build():
     Image(layer, asset_path("icons", "down.png"), (40, 220), "nw",
           tag=TAG_ACCENT_ICON, styling={"scale": 1.2})
     keys = Row(layer, (40, 280), "nw", spacing=6)
-    for key in (pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d):
-        KeyIcon(keys, key)
+    key_hints = {pygame.K_w: "Move up", pygame.K_a: "Move left",
+                 pygame.K_s: "Move down", pygame.K_d: "Move right"}
+    for key, hint in key_hints.items():
+        KeyIcon(keys, key, hover_hint=hint)
 
     # --- Controls column ---
     Label(layer, "CONTROLS", (400, 120), "nw", tag=TAG_HEADING)
@@ -142,7 +147,8 @@ def build():
                action=lambda: print("clicked"))
     TextButton(buttons, "Disabled", dimensions=(110, 40), disabled=True)
     ImageButton(buttons, asset_path("icons", "plus.png"), dimensions=(40, 40),
-                tag=TAG_ACCENT_BUTTON, styling={"image_scale": 0.8})
+                tag=TAG_ACCENT_BUTTON, styling={"image_scale": 0.8},
+                hover_hint="Add a new item")
 
     Slider(layer, (0, 100), (400, 225), (180, 10), "nw", value=state["volume"],
            suffix="%", action=lambda v: state.update(volume=v))
@@ -163,7 +169,7 @@ def build():
     if state["quality"] != QUALITY_OPTIONS[0]:
         dropdown.select_option(QUALITY_OPTIONS.index(state["quality"]))
 
-    ScrollBar(layer, 140, 420, (700, 150), "nw")
+    ScrollBar(layer, 140, 420, (700, 150), "nw", hover_hint="Drag to scroll")
 
     # --- Modals column ---
     Label(layer, "MODALS", (790, 120), "nw", tag=TAG_HEADING)
@@ -181,7 +187,8 @@ def build():
                                                path.name, ("Nice", None))))
 
     # Accordion pinned bottom-right
-    panel = Accordion(layer, "Extras", dimensions=(300, 180), stick="se")
+    panel = Accordion(layer, "Extras", dimensions=(300, 180), stick="se",
+                       hover_hint="Click the corner button to collapse")
     Label(panel, "Accordions collapse into a corner button.", (20, 70), "nw",
           styling={"font_size": 13, "max_width": 260})
     extra_row = Row(panel, (20, 120), "nw", spacing=12)
