@@ -28,6 +28,7 @@ class Dropdown(Element):
                        show = False, action = lambda i_snap=i: self.select_option(i_snap))
 
         self._restyle_parts()
+        self.update_subtree_theme({"border_weight": 0}, TextButton)
 
     def on_style_changed(self):
         super().on_style_changed()  # re-forwards the registered down_image mapping
@@ -59,6 +60,9 @@ class Dropdown(Element):
 
         for option_button in self.get_children(only_visible = False, instance = TextButton)[1:]:
             option_button.set_show(self.expanded)
+
+    def get_size(self):
+        return self.width, self.option_height
 
     def toggle(self):
         self.set_expanded(not self.expanded)

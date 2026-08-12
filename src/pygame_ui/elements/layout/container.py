@@ -36,6 +36,15 @@ class Container(Element):
             self._layout()
         return super().get_size()
 
+    def under_mouse(self):
+        # Containers are always transparent, so leaf_under_mouse() never
+        # resolves to one directly - its bounding box only gates whether to
+        # recurse into its children. A child can legitimately have a hit
+        # area larger than its reported layout size (e.g. an expanded
+        # Dropdown), so always recurse and let the children's own
+        # under_mouse() decide instead of gating on this box.
+        return True
+
     def _layout(self):
         pass
 

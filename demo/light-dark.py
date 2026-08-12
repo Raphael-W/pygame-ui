@@ -1,110 +1,29 @@
 """Light/dark theme demo — every element, switchable at runtime.
 
-Toggle with the switch in the top-right corner, or press T while nothing is
-focused. Widget state (slider value, input text, dropdown choice, switches)
-survives the theme change.
+Toggle light/dark with the switch in the top-right corner, or press T while
+nothing is focused. Press P to cycle between theme packs (see themes/).
+Widget state (slider value, input text, dropdown choice, switches) survives
+both kinds of theme change.
 """
 
 import os
 import pygame
 
 from pygame_ui import *
+from pygame_ui import Element
 from pygame_ui.utils import asset_path
+
+from themes import THEMES, PACK_NAMES, TAG_TITLE, TAG_SUBTITLE, TAG_HEADING, \
+    TAG_ACCENT_ICON, TAG_ACCENT_BUTTON
 
 FILES_DIR = os.path.join(os.path.dirname(__file__), "files")
 os.makedirs(FILES_DIR, exist_ok=True)
-
-# --- Palettes -------------------------------------------------------------
-
-LIGHT = {
-    "bg":      (238, 235, 229),
-    "surface": (255, 253, 248),
-    "raised":  (214, 209, 199),
-    "track":   (191, 185, 173),
-    "text":    (45, 42, 38),
-    "muted":   (130, 124, 114),
-    "accent":  (196, 92, 54),
-    "danger":  (168, 58, 48),
-    "on":      (118, 152, 122),
-    "off":     (188, 146, 138),
-}
-
-DARK = {
-    "bg":      (24, 22, 28),
-    "surface": (38, 36, 44),
-    "raised":  (56, 53, 63),
-    "track":   (74, 70, 82),
-    "text":    (235, 230, 224),
-    "muted":   (140, 134, 148),
-    "accent":  (226, 110, 72),
-    "danger":  (140, 45, 45),
-    "on":      (74, 96, 78),
-    "off":     (96, 66, 66),
-}
-
-
-# Tag constants: string-keyed theme selectors for visual *roles* rather than
-# element types (the CSS-class equivalent of the type-selector rules below).
-# Declaring them as constants turns a typo'd tag into a NameError instead of
-# a rule that silently never matches.
-TAG_TITLE = "title"
-TAG_SUBTITLE = "subtitle"
-TAG_HEADING = "heading"
-TAG_ACCENT_ICON = "accent-icon"
-TAG_ACCENT_BUTTON = "accent-button"
-
-
-def make_theme(p):
-    """Both themes are the same rules over a different palette."""
-    return Theme({
-        Label:       {"color": p["text"]},
-        TAG_TITLE:      {"font_size": 26, "bold": True, "color": p["accent"]},
-        TAG_SUBTITLE:   {"font_size": 14, "color": p["muted"]},
-        TAG_HEADING:    {"font_size": 13, "bold": True, "color": p["muted"]},
-        TAG_ACCENT_ICON: {"color": p["accent"]},
-        TAG_ACCENT_BUTTON: {"color": p["accent"], "image_color": p["bg"]},
-        Accordion:   {"color": p["surface"] + (230,), "border_radius": 15,
-                      "button_color": p["raised"], "icon_color": p["text"]},
-        Button:      {"color": p["raised"], "border_radius": 8},
-        TextButton:  {"font_color": p["text"]},
-        ImageButton: {"image_color": p["text"]},
-        Slider:      {"bar_color": p["track"], "handle_color": p["accent"],
-                      "font_size": 15, "font_color": p["muted"]},
-        Switch:      {"on_color": p["on"], "off_color": p["off"],
-                      "handle_color": p["bg"]},
-        TextInput:   {"color": p["surface"], "font_color": p["text"],
-                      "placeholder_font_color": p["muted"], "border_radius": 10,
-                      "button_color": p["raised"], "button_icon_color": p["muted"]},
-        Dropdown:    {"color": p["raised"], "font_color": p["text"],
-                      "icon_color": p["accent"], "border_radius": 8},
-        KeyIcon:     {"color": p["raised"], "border_color": p["accent"],
-                      "font_color": p["text"], "border_radius": 6},
-        ScrollBar:   {"track_color": p["track"], "handle_color": p["raised"],
-                      "border_radius": 5},
-        Message:     {"bg_color": p["surface"], "font_color": p["text"],
-                      "button1_color": p["raised"], "button1_font_color": p["text"],
-                      "button2_color": p["danger"], "button2_font_color": p["text"]},
-        HoverHint:   {"bg_color": p["raised"], "border_color": p["accent"],
-                      "font_color": p["text"], "border_radius": 5,
-                      "padding": (12, 8), "margins": (0, 6)},
-        FileSaver:   {"bg_color": p["surface"], "font_color": p["text"],
-                      "button_color": p["raised"], "text_input_bg": p["bg"],
-                      "text_input_font_color": p["text"]},
-        LabelModal:  {"color": p["text"]},
-        FilePicker:  {"bg_color": p["surface"], "font_color": p["text"],
-                      "icon_color": p["text"], "action_button_color": p["raised"],
-                      "delete_button_color": p["danger"], "search_bg": p["bg"],
-                      "search_font_color": p["text"], "file_selected_bg_color": p["raised"],
-                      "file_hover_bg_color": p["bg"]},
-    })
-
-
-THEMES = {"light": make_theme(LIGHT), "dark": make_theme(DARK)}
 
 # --- Widget state that survives theme switches ----------------------------
 
 state = {
     "dark": True,
+    "pack_index": 0,
     "volume": 40,
     "name": "",
     "notifications": True,
@@ -112,25 +31,41 @@ state = {
     "splash": None,     # (LabelModal, close_at_ticks)
 }
 
+
+def current_pack():
+    return THEMES[PACK_NAMES[state["pack_index"]]]
+
+
+def current_theme():
+    return current_pack()["dark" if state["dark"] else "light"]
+
+
+def current_bg():
+    return current_pack()["dark_palette" if state["dark"] else "light_palette"]["bg"]
+
 QUALITY_OPTIONS = ["High", "Medium", "Low"]
 
 
 # --- UI construction ------------------------------------------------------
 
 def build():
-    theme = THEMES["dark" if state["dark"] else "light"]
+    theme = current_theme()
+    pack_name = PACK_NAMES[state["pack_index"]]
 
     ui = UI(screen, theme)
     layer = Layer(ui)
 
     # Top bar
-    Label(layer, "Every element, two themes", (40, 30), "nw", tag=TAG_TITLE)
-    Label(layer, "flip the switch, or press T", (40, 66), "nw", tag=TAG_SUBTITLE)
+    Label(layer, pack_name, (40, 30), "nw", tag=TAG_TITLE)
+    Label(layer, "T to flip light/dark · P or the dropdown to change theme pack", (40, 66), "nw", tag=TAG_SUBTITLE)
 
-    top_right = Row(layer, spacing=12, stick="ne", offset = (40, 35))
-    KeyIcon(top_right, pygame.K_t, stick="ns")
-    Label(top_right, "Dark mode", stick="ns", styling={"font_size": 15})
-    Switch(top_right, stick="ns", value=state["dark"], action=set_dark, hover_hint = "This is a long hint, but how long can I make it exactly? I don't think there is a character limit and I don't think there is a size limit either.")
+    with Row(layer, spacing=12, stick="ne", offset = (40, 35)) as top_right:
+        pack_dropdown = Dropdown(top_right, PACK_NAMES, stick="ns", dimensions=(160, 34), action=set_pack, hover_hint="Choose a theme pack")
+        pack_dropdown.select_option(state["pack_index"])
+        KeyIcon(top_right, pygame.K_p, stick="ns", hover_hint="Next theme pack")
+        KeyIcon(top_right, pygame.K_t, stick="ns")
+        Label(top_right, "Dark mode", stick="ns", styling={"font_size": 15})
+        Switch(top_right, stick="ns", value=state["dark"], action=set_dark, hover_hint = "This is a long hint, but how long can I make it exactly? I don't think there is a character limit and I don't think there is a size limit either.")
 
     # --- Display column ---
     Label(layer, "DISPLAY", (40, 120), "nw", tag=TAG_HEADING)
@@ -221,8 +156,23 @@ def set_dark(value):
 
 def reload_theme():
     state["splash"] = None
-    new_theme = make_theme(DARK if state["dark"] else LIGHT)
-    ui.set_theme(new_theme)
+    ui.set_theme(current_theme())
+
+def next_pack():
+    state["pack_index"] = (state["pack_index"] + 1) % len(PACK_NAMES)
+    rebuild()
+
+def set_pack(name):
+    # Dropdown.select_option() always fires the action (there's no silent
+    # "set initial value" path), and we call it below just to sync the
+    # dropdown's displayed label to state on every rebuild — so this must
+    # be a no-op when the pack hasn't actually changed, or it would recurse
+    # into rebuild() forever.
+    index = PACK_NAMES.index(name)
+    if index == state["pack_index"]:
+        return
+    state["pack_index"] = index
+    rebuild()
 
 def rebuild():
     global ui
@@ -240,7 +190,7 @@ ui = build()
 
 running = True
 while running:
-    screen.fill((DARK if state["dark"] else LIGHT)["bg"])
+    screen.fill(current_bg())
 
     events = pygame.event.get()
     for event in events:
@@ -251,6 +201,8 @@ while running:
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_t:# and ui.focused is None:
             state["dark"] = not state["dark"]
             reload_theme()
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_p:
+            next_pack()
 
     ui.handle_events(events)
 

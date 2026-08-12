@@ -72,7 +72,8 @@ class UI(Node):
 
             if element_under_mouse is not None:
                 element_under_mouse.mark_hovered()
-                set_cursor = element_under_mouse.get_cursor()
+                if not element_under_mouse.disabled:
+                    set_cursor = element_under_mouse.get_cursor()
                 break
 
         if element_under_mouse is not self.hovered:
