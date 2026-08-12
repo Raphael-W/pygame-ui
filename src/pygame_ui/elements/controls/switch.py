@@ -11,9 +11,8 @@ class Switch (Element):
         self.value = value
         self.action = action
 
-    def handle_mouse_event(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            self.set_value(not self.value)
+    def on_click(self):
+        self.set_value(not self.value)
 
     def set_value(self, value):
         self.value = value

@@ -53,8 +53,13 @@ class UI(Node):
                 else:
                     self.clear_focus()
 
-            if (child is not None) and (not child.disabled):
-                child.handle_mouse_event(event)
+            # Every element must receive button releases, whether hovered or not
+            if event.type == pygame.MOUSEBUTTONUP:
+                for child in self.get_descendants(True, True):
+                    child.handle_mouse_event(event)
+            else:
+                if (child is not None) and (not child.disabled):
+                    child.handle_mouse_event(event)
 
     def draw(self):
         self.invalidate_hovered()

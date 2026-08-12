@@ -25,6 +25,7 @@ class Element(Node):
         self.disabled = disabled
         self.selected = False
         self.hovered = False
+        self._held_down = False
 
         self.styling = styling or {}
         self.subtree_theme = {}
@@ -40,7 +41,27 @@ class Element(Node):
         parent.add_child(self, child_index)
 
     def handle_mouse_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            self._held_down = True
+            self.on_press()
+
+        elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+            if self._held_down:
+                self.on_click()
+            self._held_down = False
+            self.on_release()
+
+    def on_click(self):
         pass
+
+    def on_press(self):
+        pass
+
+    def on_release(self):
+        pass
+
+    def is_held_down(self):
+        return self._held_down
 
     def handle_keyboard_event(self, event):
         pass

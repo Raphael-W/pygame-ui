@@ -24,7 +24,6 @@ class SlidingElement (Element):
         self.change_action = action
         self.finished_change_action = finished_action
 
-        self.handle_selected = False
         self.mouse_handle_offset = (0, 0)
         self._from_value = value
 
@@ -47,23 +46,20 @@ class SlidingElement (Element):
     def under_mouse(self):
         return True
 
-    def handle_mouse_event(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            self.handle_selected = True
-            self._from_value = self.value
+    def on_press(self):
+        self._from_value = self.value
 
-            rel_mouse_x, rel_mouse_y = self.get_relative_mouse()
-            rel_handle_x, rel_handle_y = self._get_rel_handle_pos()
-            self.mouse_handle_offset = (rel_mouse_x - rel_handle_x, rel_mouse_y - rel_handle_y)
-            return True
+        rel_mouse_x, rel_mouse_y = self.get_relative_mouse()
+        rel_handle_x, rel_handle_y = self._get_rel_handle_pos()
+        self.mouse_handle_offset = (rel_mouse_x - rel_handle_x, rel_mouse_y - rel_handle_y)
+        return True
+
+    def on_release(self):
+        if self.finished_change_action is not None:
+            self.finished_change_action(self._from_value, self.value)
 
     def visible_update(self):
-        if not pygame.mouse.get_pressed()[0] and self.handle_selected:
-            self.handle_selected = False
-            if self.finished_change_action is not None:
-                self.finished_change_action(self._from_value, self.value)
-
-        if self.handle_selected:
+        if self.is_held_down():
             if self.change_action is not None:
                 self.change_action(self.value)
 

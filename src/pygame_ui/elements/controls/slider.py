@@ -33,7 +33,7 @@ class Slider (SlidingElement):
 
     def draw_handle(self, surface, x, y):
         handle_color = self.style["handle_color"]
-        if self.hovered or self.handle_selected or self.disabled:
+        if self.hovered or self.is_held_down() or self.disabled:
             handle_color = mult_color(handle_color, 0.6)
 
         pygame.gfxdraw.aacircle(surface, x, y, int(self.handle_diameter / 2), handle_color)

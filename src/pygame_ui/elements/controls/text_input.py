@@ -154,12 +154,10 @@ class TextInput(Element):
 
         return False
 
-    def handle_mouse_event(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and self.under_mouse():
-            rel_mouse_x, rel_mouse_y = self.get_relative_mouse()
-            self.cursor_index = self.index_at_x(rel_mouse_x - self.x_padding - self.text_x_offset)
-            self.last_input_time = time.time()
-            return True
+    def on_click(self):
+        rel_mouse_x, rel_mouse_y = self.get_relative_mouse()
+        self.cursor_index = self.index_at_x(rel_mouse_x - self.x_padding - self.text_x_offset)
+        self.last_input_time = time.time()
 
     def visible_update(self):
         for key, data in self.key_holding.items():

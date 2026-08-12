@@ -12,7 +12,6 @@ class Button (Element):
         super().__init__(parent, offset, dimensions, stick, **kwargs)
         self.content = content
         self.action = action
-        self._captured = False
 
     def get_content_element(self):
         return self.content
@@ -21,18 +20,9 @@ class Button (Element):
         self.content = element
         self.set_disabled(self.disabled)
 
-    def handle_mouse_event(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            self._captured = True
-            return True
-
-        if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-            if self._captured and self.action is not None:
-                self.action()
-            self._captured = False
-            return False
-
-        return False
+    def on_click(self):
+        if self.action is not None:
+            self.action()
 
     def draw(self, surface):
         x, y = self.get_pos()
