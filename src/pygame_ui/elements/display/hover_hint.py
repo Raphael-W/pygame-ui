@@ -42,15 +42,21 @@ class HoverHint(Element):
 
         return x, y
 
-    def set_new_target(self, target):
+    def cancel_show_countdown(self):
         self.time_of_initial_hover = None
+
+    def reset_show_countdown(self):
+        self.time_of_initial_hover = time.time()
+
+    def set_new_target(self, target):
+        self.cancel_show_countdown()
         self.invalidate_styling()
         self.target = target
 
         if target is None: return
         if target.get_hover_hint() is None: return
 
-        self.time_of_initial_hover = time.time()
+        self.reset_show_countdown()
         self.hint_label.set_text(target.get_hover_hint())
 
     def get_theme(self):
@@ -65,6 +71,9 @@ class HoverHint(Element):
         if self.time_of_initial_hover is None:
             self.set_show(False)
             return
+
+        if self.target is not None and self.target.is_held_down():
+            self.reset_show_countdown()
 
         time_since = time.time() - self.time_of_initial_hover
         self.set_show(time_since >= self.style["show_delay"])
