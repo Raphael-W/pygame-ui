@@ -14,7 +14,10 @@ from ..layout import Row
 from ...utils import asset_path, FONT_PATH
 
 class FilePicker(ModalElement):
-    style_defaults = {"font_color": (200, 200, 200), "icon_color": (200, 200, 200), "bg_color": (70, 70, 70)}
+    style_defaults = {"font_color": (200, 200, 200), "icon_color": (200, 200, 200), "bg_color": (70, 70, 70),
+                      "action_button_color": (120, 120, 120), "delete_button_color": (95, 25, 25),
+                      "search_bg": (50, 50, 50), "search_font_color": (200, 200, 200), "file_selected_bg_color": (90, 90, 90),
+                      "file_hover_bg_color": (50, 50, 50)}
 
     def __init__(self, layer, title, directory, extension, action, file_validation = None, **kwargs):
         super().__init__(layer, (350, 395), **kwargs)
@@ -30,14 +33,23 @@ class FilePicker(ModalElement):
         self.perform_action = False
         self.file_validation = file_validation
 
-        Label(self, title, (0, 25), "new", styling = {"color": self.style["font_color"], "font_size": 25, "bold": True})
-        ImageButton(self, asset_path("icons", "cross.png"), (15, 15), (30, 30), "ne", styling = {"color": (120, 120, 120), "image_color": self.style["icon_color"], "image_scale": 0.8}, action = self.close)
-        self.file_search = TextInput(self, (0, 70), "new", styling={"color": (50, 50, 50), "font_size": 18, "font_color": self.style["font_color"], "length": self.width - 30}, placeholder = "Search", type_action = self._render_files)
+        title = Label(self, title, (0, 25), "new", styling = {"font_size": 25, "bold": True})
+        self.register_style_mapping(title, {"color": "font_color"})
 
-        bottom_row = Row(self, offset = (15, 15), stick="s", spacing = 10)
-        self.open_track_button = TextButton(bottom_row, "Open", dimensions=(self.width - 130, 40), styling = {"color": (120, 120, 120), "font_color": self.style["font_color"]}, action = self.open_file)
-        self.delete_track_button = ImageButton(bottom_row, asset_path("icons", "bin.png"), dimensions=(40, 40), styling={"color": (95, 25, 25), "image_color": self.style["icon_color"], "image_scale": 0.8}, action = self.delete_file)
-        self.rename_track_button = ImageButton(bottom_row, asset_path("icons", "rename.png"), dimensions=(40, 40), styling={"color": (120, 120, 120), "image_color": self.style["icon_color"], "image_scale": 0.8}, action = self.rename_file)
+        ImageButton(self, asset_path("icons", "cross.png"), (15, 15), (30, 30), "ne", styling = {"color": (120, 120, 120), "image_color": self.style["icon_color"], "image_scale": 0.8}, action = self.close)
+
+        self.file_search = TextInput(self, (0, 70), "new", styling={"font_size": 18, "length": self.width - 30}, placeholder = "Search", type_action = self._render_files)
+        self.register_style_mapping(self.file_search, {"font_color": "search_font_color", "color": "search_bg"})
+
+        with Row(self, offset = (15, 15), stick="s", spacing = 10) as bottom_row:
+            self.open_track_button = TextButton(bottom_row, "Open", dimensions=(self.width - 130, 40), action = self.open_file)
+            self.register_style_mapping(self.open_track_button, {"font_color": "font_color", "color": "action_button_color"})
+
+            self.delete_track_button = ImageButton(bottom_row, asset_path("icons", "bin.png"), dimensions=(40, 40), styling={"image_scale": 0.8}, action = self.delete_file)
+            self.register_style_mapping(self.delete_track_button, {"image_color": "icon_color", "color": "delete_button_color"})
+
+            self.rename_track_button = ImageButton(bottom_row, asset_path("icons", "rename.png"), dimensions=(40, 40), styling={"color": (120, 120, 120), "image_scale": 0.8}, action = self.rename_file)
+            self.register_style_mapping(self.rename_track_button, {"image_color": "icon_color", "color": "action_button_color"})
 
         self.font = pygame.freetype.Font(FONT_PATH, 18)
         self.files_surface = None
@@ -45,6 +57,11 @@ class FilePicker(ModalElement):
         self.scroll_bar = ScrollBar(self, self.height - 191, self.height - 191, (30, 121), "ne")
         self._load_files()
 
+        self.on_style_changed()
+
+    def on_style_changed(self):
+        super().on_style_changed()
+        self._render_files()
 
     def _load_files(self):
         self.files = {}
@@ -150,11 +167,11 @@ class FilePicker(ModalElement):
 
         if item_index is not None:
             pos_index = list(self.filtered_files.keys()).index(item_index)
-            pygame.draw.rect(self.selection_surface, (90, 90, 90), (0, (pos_index * row_height), 275, row_height), 0, 15)
+            pygame.draw.rect(self.selection_surface, self.style["file_selected_bg_color"], (0, (pos_index * row_height), 275, row_height), 0, 15)
 
         if self.selected_file is not None:
             selected_pos_index = list(self.filtered_files.keys()).index(self.selected_file)
-            pygame.draw.rect(self.selection_surface, (50, 50, 50), (0, (selected_pos_index * row_height), 275, row_height), 0,15)
+            pygame.draw.rect(self.selection_surface, self.style["file_hover_bg_color"], (0, (selected_pos_index * row_height), 275, row_height), 0,15)
 
         surface.blit(self.selection_surface, (x + 15, y + 121), area = (0, scroll_y, self.width, self.height - 191))
         surface.blit(self.files_surface, (x + 30, y + 121), area = (0, scroll_y, self.width, self.height - 191))

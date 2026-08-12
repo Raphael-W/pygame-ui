@@ -82,14 +82,20 @@ def make_theme(p):
         ScrollBar:   {"track_color": p["track"], "handle_color": p["raised"],
                       "border_radius": 5},
         Message:     {"bg_color": p["surface"], "font_color": p["text"],
-                      "button1_color": p["raised"], "button2_color": p["danger"]},
+                      "button1_color": p["raised"], "button1_font_color": p["text"],
+                      "button2_color": p["danger"], "button2_font_color": p["text"]},
         HoverHint:   {"bg_color": p["raised"], "border_color": p["accent"],
                       "font_color": p["text"], "border_radius": 5,
                       "padding": (12, 8), "margins": (0, 6)},
         FileSaver:   {"bg_color": p["surface"], "font_color": p["text"],
-                      "button_color": p["raised"]},
+                      "button_color": p["raised"], "text_input_bg": p["bg"],
+                      "text_input_font_color": p["text"]},
+        LabelModal:  {"color": p["text"]},
         FilePicker:  {"bg_color": p["surface"], "font_color": p["text"],
-                      "icon_color": p["text"]},
+                      "icon_color": p["text"], "action_button_color": p["raised"],
+                      "delete_button_color": p["danger"], "search_bg": p["bg"],
+                      "search_font_color": p["text"], "file_selected_bg_color": p["raised"],
+                      "file_hover_bg_color": p["bg"]},
     })
 
 

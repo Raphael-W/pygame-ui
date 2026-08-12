@@ -6,7 +6,8 @@ from ..controls import TextButton, TextInput, ImageButton
 from ...utils import asset_path
 
 class FileSaver(ModalElement):
-    style_defaults = {"bg_color": (70, 70, 70), "button_color": (120, 120, 120), "border_radius": 15, "font_color": (200, 200, 200)}
+    style_defaults = {"bg_color": (70, 70, 70), "button_color": (120, 120, 120), "border_radius": 15,
+                      "font_color": (200, 200, 200), "text_input_bg": (50, 50, 50), "text_input_font_color": (200, 200, 200)}
 
     def __init__(self, layer, directory, file_extension, action, title = "Save", *, placeholder = "File name", value = "", **kwargs):
         super().__init__(layer, (350, 175), **kwargs)
@@ -18,10 +19,17 @@ class FileSaver(ModalElement):
 
         self.existing_files = [name for name in os.listdir(self.directory)]
 
-        Label(self, self.title, (0, 20), "new", styling={"font_size": 28, "bold": True, "color": self.style["font_color"]})
-        self.name_input = TextInput(self, (0, 70), "sew", styling={"length": self.width - 30, "font_size": 21, "color": (50, 50, 50), "font_color": self.style["font_color"]}, placeholder = placeholder, text = value, character_blacklist = ["\\", "/", ":", "*", "?", '"', "<", ">", "|"], pattern_check = r'.+', verification_function = self.check_name, action = self.save_file)
-        self.save_button = TextButton(self, self.title, (0, 15), (self.width - 30, 40), "sew", styling={"font_size": 18, "color": self.style["button_color"], "font_color": self.style["font_color"]}, action = self.save_file)
-        ImageButton(self, asset_path("icons", "cross.png"), (15, 15), (30, 30), "ne", styling={"color": self.style["button_color"], "image_color": (200, 200, 200), "image_scale": 0.8}, action = self.close)
+        title = Label(self, self.title, (0, 20), "new", styling={"font_size": 28, "bold": True})
+        self.register_style_mapping(title, {"color": "font_color"})
+
+        self.name_input = TextInput(self, (0, 70), "sew", styling={"length": self.width - 30, "font_size": 21}, placeholder = placeholder, text = value, character_blacklist = ["\\", "/", ":", "*", "?", '"', "<", ">", "|"], pattern_check = r'.+', verification_function = self.check_name, action = self.save_file)
+        self.register_style_mapping(self.name_input, {"color": "text_input_bg", "font_color": "font_color"})
+
+        self.save_button = TextButton(self, self.title, (0, 15), (self.width - 30, 40), "sew", styling={"font_size": 18}, action = self.save_file)
+        self.register_style_mapping(self.save_button, {"color": "button_color", "font_color": "font_color"})
+
+        close_button = ImageButton(self, asset_path("icons", "cross.png"), (15, 15), (30, 30), "ne", styling={"image_scale": 0.8}, action = self.close)
+        self.register_style_mapping(close_button, {"color": "button_color", "image_color": "font_color"})
 
         self.get_root().set_focus(self.name_input)
 

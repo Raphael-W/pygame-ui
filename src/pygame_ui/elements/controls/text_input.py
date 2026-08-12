@@ -59,6 +59,8 @@ class TextInput(Element):
         self.font = pygame.freetype.Font(self.style["font_path"], self.style["font_size"])
         self.font.origin = True
 
+        self.set_dimensions(self.style["length"], self.style["font_size"] * 2)
+
     def _backspace(self):
         if self.cursor_index > 0:
             self.text = self.text[:self.cursor_index - 1] + self.text[self.cursor_index:]
