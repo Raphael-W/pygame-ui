@@ -6,12 +6,6 @@ class Container(Element):
 
         self.slots = None
 
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        return False
-
     def add_child(self, child, index = -1):
         super().add_child(child, index)
         self.invalidate_layout()

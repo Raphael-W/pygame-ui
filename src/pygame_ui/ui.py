@@ -2,8 +2,9 @@ import pygame
 
 from .element import Element
 from .node import Node
-from .elements.modals.modal_layer import ModalLayer
-from .elements.display.hover_hint import HoverHint
+from .elements.modals import ModalLayer
+from .elements.display import HoverHint
+from .elements.layout import Layer
 from .theme import Theme
 
 class UI(Node):
@@ -15,14 +16,19 @@ class UI(Node):
         self.surface = surface
         self.theme = theme
 
-        self.modals = ModalLayer(self)
-        self.hover_hint = HoverHint(self)
+        with Layer(self) as elements_on_top:
+            self.modals = ModalLayer(elements_on_top)
+            self.popovers = Layer(elements_on_top)
+            self.hover_hint = HoverHint(elements_on_top)
 
         self.focused = None
         self.hovered = None
 
     def get_modal_layer(self):
         return self.modals
+
+    def get_popover_layer(self):
+        return self.popovers
 
     def get_theme(self):
         return self.theme
@@ -33,7 +39,7 @@ class UI(Node):
             child.trigger_on_style_changed()
 
     def add_child(self, child, index = -1):
-        super().add_child(child, index - 2)
+        super().add_child(child, index - 1)
 
     def handle_events(self, events):
         mouse_events = [e for e in events if e.type in (pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP, pygame.MOUSEWHEEL)]

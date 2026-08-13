@@ -213,3 +213,9 @@ class Element(Node):
             cls = Element
         self.subtree_theme.update({cls: rules})
         self.trigger_on_style_changed()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        return False

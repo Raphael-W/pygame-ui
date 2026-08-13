@@ -83,9 +83,14 @@ class Node:
 
     def get_ancestors(self):
         ancestors = [self]
-        while ancestors[-1].parent is not None:
-            ancestors.append(ancestors[-1].parent)
+        while True:
+            next_ancestor = ancestors[-1].get_acting_parent()
+            if next_ancestor is None: break
+            ancestors.append(next_ancestor)
         return ancestors
+
+    def get_acting_parent(self):
+        return self.parent
 
     def get_descendants(self, only_visible = True, only_enabled = False):
         descendants = []
