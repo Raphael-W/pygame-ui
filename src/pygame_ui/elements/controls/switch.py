@@ -4,7 +4,7 @@ from ...utils import mult_color
 from ...element import Element
 
 class Switch (Element):
-    style_defaults = {"handle_color": (20, 20, 20), "disabled_handle_color": (50, 50, 50), "on_color": (41, 66, 43), "off_color": (66, 41, 41), "scale": 1}
+    style_defaults = {"handle_color": (20, 20, 20), "disabled_handle_color": (50, 50, 50), "on_color": (41, 66, 43), "off_color": (66, 41, 41), "scale": 1, "border_radius": 100}
     def __init__(self, parent, offset = (0, 0), stick = "", *, value = True, action = None, **kwargs):
         super().__init__(parent, offset, (0, 0), stick, **kwargs)
         self.set_dimensions(55 * self.style["scale"], 25 * self.style["scale"])
@@ -35,7 +35,7 @@ class Switch (Element):
         if self.disabled:
             handle_color = self.style["disabled_handle_color"]
 
-        pygame.draw.rect(surface, color, (x, y, self.width, self.height), 0, 100)
+        pygame.draw.rect(surface, color, (x, y, self.width, self.height), 0, self.style["border_radius"])
 
         pygame.gfxdraw.aacircle(surface, int(x + (self.width / 4) + circleOffset), int(y + (self.height / 2)), int(9 * self.style["scale"]), handle_color)
         pygame.gfxdraw.filled_circle(surface, int(x + (self.width / 4) + circleOffset), int(y + (self.height / 2)), int(9 * self.style["scale"]), handle_color)

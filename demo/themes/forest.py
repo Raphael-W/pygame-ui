@@ -31,7 +31,8 @@ DARK = {
     "off":     (184, 136, 84),
 }
 
-SHAPE = dict(radius=14, border_weight=0, title_size=26)
+SHAPE = dict(radius=14, border_weight=0, title_size=26,
+             switch_radius=14, scrim_tint=(18, 22, 14), scrim_opacity=0.78)
 
 LIGHT_THEME = build_theme(LIGHT, **SHAPE)
 DARK_THEME = build_theme(DARK, **SHAPE)

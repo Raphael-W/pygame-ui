@@ -11,8 +11,8 @@ class Label(Element):
 
         self.text = text
         self.text_surface = None
+        self.font = None
 
-        self._font_cache = {}
         self._render_text()
 
     def _render_text(self):
@@ -24,21 +24,16 @@ class Label(Element):
         min_font_size = self.style["min_font_size"] or font_size
         max_width = float('inf') if self.style["max_width"] < 0 else self.style["max_width"]
         wrap_mode = self.style["wrap_mode"]
-        font = self.get_font(font_size)
+        font = self.get_font()
         font.strong = self.style["bold"]
 
-        def set_font_size(size):
-            nonlocal font, font_size
-            font_size = size
-            font = self.get_font(font_size)
-            font.strong = self.style["bold"]
-
         def width(text):
-            return font.get_rect(text).width
+            return font.get_rect(text, size=font_size).width
 
         def shrink_to_fit(text):
+            nonlocal font_size
             while width(text) > max_width and font_size > min_font_size:
-                set_font_size(font_size - 1)
+                font_size -= 1
 
         def ellipsize(words):
             words = list(words)
@@ -72,13 +67,13 @@ class Label(Element):
         longest_line = max([width(l) for l in lines] + [0])
         self.width = min(longest_line, max_width)
 
-        self.height = font.get_sized_height() * (len(lines) - 1) + font.get_rect(lines[-1]).height
+        self.height = font.get_sized_height(font_size) * (len(lines) - 1) + font.get_rect(lines[-1], size=font_size).height
         self.invalidate_pos()
 
         self.text_surface = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
         for i, l in enumerate(lines):
             line_offset_x = (self.width - width(l)) / 2
-            font.render_to(self.text_surface, (line_offset_x, i * font.get_sized_height()), l, color)
+            font.render_to(self.text_surface, (line_offset_x, i * font.get_sized_height(font_size)), l, color, size = font_size)
 
     def set_disabled(self, disabled):
         super().set_disabled(disabled)
@@ -88,19 +83,22 @@ class Label(Element):
         self.text = new_text
         self._render_text()
 
-    def get_font(self, size) -> pygame.freetype.Font:
-        if cached := self._font_cache.get((self.style["font_path"], size)):
-            return cached
+    def get_font(self) -> pygame.freetype.Font:
+        if self.font is None:
+            self.font = self._create_font()
+        return self.font
 
-        created_font = self._create_font(size)
-        self._font_cache[(self.style["font_path"], size)] = created_font
-        return created_font
-
-    def _create_font(self, size):
-        font = pygame.freetype.Font(self.style["font_path"], size)
+    def _create_font(self):
+        if font_name := self.style["font_name"]:
+            font = pygame.freetype.SysFont(font_name, 0)
+        elif font_path := self.style["font_path"]:
+            font = pygame.freetype.Font(font_path)
+        else:
+            font = pygame.freetype.SysFont("", 0)
         return font
 
     def on_style_changed(self):
+        self.font = None
         self._render_text()
 
     def draw(self, surface):

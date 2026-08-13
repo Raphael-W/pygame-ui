@@ -3,7 +3,7 @@ from .utils import FONT_PATH
 from .node import Node
 
 class Element(Node):
-    style_defaults = {"cursor": pygame.SYSTEM_CURSOR_ARROW, "font_path": FONT_PATH}
+    style_defaults = {"cursor": pygame.SYSTEM_CURSOR_ARROW, "font_path": FONT_PATH, "font_name": None}
 
     def __init__(self, parent, offset, dimensions, stick, *, hover_hint = None, show=True, disabled=False, styling=None, tag=None, child_index=-1, transparent=False):
         super().__init__(parent)

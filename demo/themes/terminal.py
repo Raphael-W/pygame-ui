@@ -32,7 +32,9 @@ DARK = {
     "off":     (210, 140, 60),
 }
 
-SHAPE = dict(radius=2, border_weight=2, key_border_weight=2, title_size=24)
+SHAPE = dict(radius=2, border_weight=2, key_border_weight=2, title_size=24,
+             switch_radius=2, scrim_tint=(0, 12, 16), scrim_opacity=0.82,
+             font_name="consolas,menlo,couriernew,monospace")
 
 LIGHT_THEME = build_theme(LIGHT, **SHAPE)
 DARK_THEME = build_theme(DARK, **SHAPE)

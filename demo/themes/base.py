@@ -26,8 +26,13 @@ Shape keys (all optional, see defaults below):
     hint_radius     hover-hint tooltip corners
     border_weight   outline weight on buttons/keys (0 = filled, no outline)
     switch_scale    Switch control scale
+    switch_radius   Switch pill/corner radius (100 = fully rounded)
     key_size        KeyIcon scale
     cursor          pygame cursor constant used on clickable controls
+    scrim_tint      RGB colour the modal Scrim is tinted (defaults to a
+                    neutral grey via Scrim's own style_defaults)
+    scrim_opacity   Scrim opacity, 0-1 (defaults to Scrim's own style_defaults)
+    font_name       system font family name; None keeps the bundled font
 """
 
 import pygame
@@ -46,8 +51,9 @@ TAG_ACCENT_BUTTON = "accent-button"
 
 def build_theme(p, *, radius=10, panel_radius=None, key_radius=None,
                  scrollbar_radius=5, hint_radius=None, border_weight=0,
-                 key_border_weight=2, switch_scale=1, key_size=1,
-                 cursor=pygame.SYSTEM_CURSOR_HAND, title_size=26):
+                 key_border_weight=2, switch_scale=1, switch_radius=100,
+                 key_size=1, cursor=pygame.SYSTEM_CURSOR_HAND, title_size=26,
+                 scrim_tint=None, scrim_opacity=None, font_name=None):
     if panel_radius is None:
         panel_radius = radius + 5
     if key_radius is None:
@@ -55,7 +61,14 @@ def build_theme(p, *, radius=10, panel_radius=None, key_radius=None,
     if hint_radius is None:
         hint_radius = max(radius - 4, 0)
 
+    scrim_style = {}
+    if scrim_tint is not None:
+        scrim_style["tint"] = scrim_tint
+    if scrim_opacity is not None:
+        scrim_style["opacity"] = scrim_opacity
+
     return Theme({
+        Element:     {"font_name": font_name},
         Label:       {"color": p["text"]},
         TAG_TITLE:      {"font_size": title_size, "bold": True, "color": p["accent"]},
         TAG_SUBTITLE:   {"font_size": 14, "color": p["muted"]},
@@ -72,7 +85,8 @@ def build_theme(p, *, radius=10, panel_radius=None, key_radius=None,
         Slider:      {"bar_color": p["track"], "handle_color": p["accent"],
                       "font_size": 15, "font_color": p["muted"]},
         Switch:      {"on_color": p["on"], "off_color": p["off"],
-                      "handle_color": p["bg"], "scale": switch_scale},
+                      "handle_color": p["bg"], "scale": switch_scale,
+                      "border_radius": switch_radius},
         TextInput:   {"color": p["surface"], "font_color": p["text"],
                       "placeholder_font_color": p["muted"], "border_radius": radius,
                       "button_color": p["raised"], "button_border_radius": radius,
@@ -97,6 +111,7 @@ def build_theme(p, *, radius=10, panel_radius=None, key_radius=None,
                       "button_color": p["raised"], "text_input_bg": p["bg"],
                       "text_input_font_color": p["text"]},
         LabelModal:  {"color": p["text"]},
+        Scrim:       scrim_style,
         FilePicker:  {"bg_color": p["surface"], "font_color": p["text"],
                       "border_radius": panel_radius,
                       "icon_color": p["text"], "action_button_color": p["raised"],
