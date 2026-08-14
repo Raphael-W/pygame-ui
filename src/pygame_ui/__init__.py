@@ -8,6 +8,7 @@ from .elements.layout.accordion import Accordion
 # Display
 from .elements.display.label import Label
 from .elements.display.image import Image
+from .elements.display.inline_svg import InlineSVG
 from .elements.display.key_icon import KeyIcon
 from .elements.display.hover_hint import HoverHint
 
@@ -35,7 +36,7 @@ from .ui import UI
 from .element import Element
 
 __all__ = ["Layer", "Container", "Column", "Row", "Accordion",
-           "Label", "Image", "KeyIcon", "HoverHint",
+           "Label", "Image", "InlineSVG", "KeyIcon", "HoverHint",
            "Button", "TextButton", "ImageButton", "Slider", "Switch", "TextInput", "Dropdown", "ScrollBar",
            "ModalElement", "ModalLayer", "Scrim", "Message", "LabelModal", "FileSaver", "FilePicker",
            "UI", "Theme", "Element"]

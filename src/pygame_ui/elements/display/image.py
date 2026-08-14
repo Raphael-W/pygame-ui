@@ -9,6 +9,7 @@ class Image(Element):
         super().__init__(parent, offset, (0, 0), stick, transparent=transparent, **kwargs)
 
         self.source = source
+        self.native_size = None
         self.image = None
         self.transformed_image = None
 
@@ -26,7 +27,9 @@ class Image(Element):
         if self.disabled:
             color = mult_color(color, 0.6)
 
-        self.transformed_image = pygame.transform.scale_by(self.image, self.style["scale"])
+        target_size = (max(1, round(self.native_size[0] * self.style["scale"])),
+                       max(1, round(self.native_size[1] * self.style["scale"])))
+        self.transformed_image = pygame.transform.scale(self.image, target_size)
         self.transformed_image = pygame.transform.rotate(self.transformed_image, (self.style["rotation"] % 360))
         self.transformed_image.fill(color, special_flags = pygame.BLEND_RGB_MAX)
 
@@ -34,7 +37,13 @@ class Image(Element):
 
     def load_source(self, source):
         self.source = source
-        self.image = pygame.image.load(source).convert_alpha()
+        if str(source).lower().endswith(".svg"):
+            self.native_size = pygame.image.load(source).get_size()
+            render_size = tuple(max(1, round(d * 4)) for d in self.native_size)
+            self.image = pygame.image.load_sized_svg(source, render_size).convert_alpha()
+        else:
+            self.image = pygame.image.load(source).convert_alpha()
+            self.native_size = self.image.get_size()
         self.transform()
 
     def draw(self, surface):

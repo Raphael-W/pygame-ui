@@ -19,6 +19,13 @@ from themes import THEMES, PACK_NAMES, TAG_TITLE, TAG_SUBTITLE, TAG_HEADING, \
 FILES_DIR = os.path.join(os.path.dirname(__file__), "files")
 os.makedirs(FILES_DIR, exist_ok=True)
 
+# Demonstrates InlineSVG: markup lives directly in code, no asset file
+# needed. Fill is black so the theme's BLEND_RGB_MAX tint (see Image.transform)
+# replaces it cleanly, same convention the icons/*.png silhouettes use.
+STAR_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <path fill="#000000" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+</svg>"""
+
 # --- Widget state that survives theme switches ----------------------------
 
 state = {
@@ -74,6 +81,9 @@ def build():
           styling={"font_size": 15, "max_width": 280})
     Image(layer, asset_path("icons", "down.png"), (40, 220), "nw",
           tag=TAG_ACCENT_ICON, styling={"scale": 1.2})
+    InlineSVG(layer, STAR_SVG, (85, 220), "nw",
+              tag=TAG_ACCENT_ICON, styling={"scale": 1.2},
+              hover_hint="Inline SVG icon (no file on disk)")
     keys = Row(layer, (40, 280), "nw", spacing=6)
     key_hints = {pygame.K_w: "Move up", pygame.K_a: "Move left",
                  pygame.K_s: "Move down", pygame.K_d: "Move right"}

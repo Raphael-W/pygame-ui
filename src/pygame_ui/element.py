@@ -217,13 +217,13 @@ class Element(Node):
         return theme.extended(self.subtree_theme)
 
     def create_font(self):
-        if font_path := self.style.get("font_path"):
+        if font_name := self.style.get("font_name"):
+            font = pygame.freetype.SysFont(font_name, 0)
+        elif font_path := self.style.get("font_path"):
             try:
                 font = pygame.freetype.Font(font_path)
             except:
-                font = pygame.freetype.SysFont(self.style.get("font_name", ""), 0)
-        elif font_name := self.style.get("font_name"):
-            font = pygame.freetype.SysFont(font_name, 0)
+                font = pygame.freetype.SysFont("", 0)
         else:
             font = pygame.freetype.SysFont("", 0)
         return font
