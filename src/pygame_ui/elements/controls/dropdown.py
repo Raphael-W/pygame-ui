@@ -36,7 +36,7 @@ class Dropdown(Element):
         self._restyle_parts()
 
     def _restyle_parts(self):
-        r = self.style["border_radius"]
+        r = min(self.style["border_radius"], self.height // 2)
         common = {"color": self.style["color"], "font_color": self.style["font_color"]}
 
         self.main_button.update_styling({**common, "border_radius": (r, r, 0, 0) if self.expanded else r})
