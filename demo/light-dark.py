@@ -128,13 +128,15 @@ def build():
                                                path.name, ("Nice", None))))
 
     # Accordion pinned bottom-right
-    panel = Accordion(layer, "Extras", dimensions=(300, 180), stick="se",
+    panel = Accordion(layer, "Extras", dimensions=(300, None), stick="se",
                        hover_hint="Click the corner button to collapse")
-    Label(panel, "Accordions collapse into a corner button.", (20, 70), "nw",
-          styling={"font_size": 13, "max_width": 260})
-    extra_row = Row(panel, (20, 120), "nw", spacing=12)
-    Switch(extra_row, stick="ns")
-    Label(extra_row, "A switch in a panel", stick="ns", styling={"font_size": 13})
+    with Column(panel, offset=(0, 60), stick="ew") as col:
+        Label(col, "Accordions collapse into a corner button.", stick="nw",
+              styling={"font_size": 13, "max_width": 260})
+
+        with Row(col, stick="nw", spacing=12) as row:
+            Switch(row, stick="ns")
+            Label(row, "A switch in a panel", stick="ns", styling={"font_size": 13})
 
     return ui
 

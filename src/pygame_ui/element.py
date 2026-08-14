@@ -9,7 +9,7 @@ class Element(Node):
     def __init__(self, parent, offset, dimensions, stick, *, hover_hint = None, show=True, disabled=False, styling=None, tag=None, child_index=-1, transparent=False):
         super().__init__(parent)
         self.offset_x, self.offset_y = offset
-        self.width, self.height = dimensions
+        self._width, self._height = dimensions
 
         self._x = None
         self._y = None
@@ -144,14 +144,30 @@ class Element(Node):
         return self._x, self._y
 
     def get_size(self):
-        return self.width, self.height
+        return self._width, self._height
+
+    @property
+    def width(self):
+        return self.get_size()[0]
+
+    @width.setter
+    def width(self, new_width):
+        self.set_dimensions(new_width, self.height)
+
+    @property
+    def height(self):
+        return self.get_size()[1]
+
+    @height.setter
+    def height(self, new_height):
+        self.set_dimensions(self.width, new_height)
 
     def get_cursor(self):
         return self.style["cursor"]
 
     def set_dimensions(self, new_width, new_height):
-        self.width = new_width
-        self.height = new_height
+        self._width = new_width
+        self._height = new_height
         self.invalidate_pos()
 
     def remove(self):

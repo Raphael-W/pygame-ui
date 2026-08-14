@@ -2,9 +2,8 @@ from ...element import Element
 
 class Container(Element):
     def __init__(self, parent, offset = (0, 0), stick="", **kwargs):
-        super().__init__(parent, offset, (0, 0), stick, transparent=True, **kwargs)
-
         self.slots = None
+        super().__init__(parent, offset, (0, 0), stick, transparent=True, **kwargs)
 
     def add_child(self, child, index = -1):
         super().add_child(child, index)

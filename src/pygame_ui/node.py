@@ -52,21 +52,22 @@ class Node:
     def place_child(self, child):
         parent_x, parent_y = self.get_pos()
         parent_width, parent_height = self.get_size()
+        child_width, child_height = child.get_size()
 
         stick = child.stick
         n, e, s, w = stick["n"], stick["e"], stick["s"], stick["w"]
 
         if e and w:  # left and right (should horizontal centre)
-            x = parent_x + ((parent_width - child.width) / 2) + child.offset_x
+            x = parent_x + ((parent_width - child_width) / 2) + child.offset_x
         elif e:  # right-only
-            x = parent_x + parent_width - child.width - child.offset_x
+            x = parent_x + parent_width - child_width - child.offset_x
         else:  # left-only, or neither
             x = parent_x + child.offset_x
 
         if n and s:  # top and bottom (should vertically centre)
-            y = parent_y + ((parent_height - child.height) / 2) + child.offset_y
+            y = parent_y + ((parent_height - child_height) / 2) + child.offset_y
         elif s:  # bottom-only
-            y = parent_y + parent_height - child.height - child.offset_y
+            y = parent_y + parent_height - child_height - child.offset_y
         else:  # top-only, or neither
             y = parent_y + child.offset_y
 

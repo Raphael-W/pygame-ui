@@ -3,9 +3,9 @@ from .container import Container
 
 class Row(Container):
     def __init__(self, parent, offset = (0, 0), stick="", spacing=10, **kwargs):
-        super().__init__(parent, offset, stick, **kwargs)
 
         self.spacing = spacing
+        super().__init__(parent, offset, stick, **kwargs)
 
     def _layout(self):
         self.slots = {}

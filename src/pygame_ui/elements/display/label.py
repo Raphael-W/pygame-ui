@@ -65,6 +65,8 @@ class Label(Element):
             lines.append(" ".join(ellipsize(line) if wrap_mode == "ellipse" else line))
 
         longest_line = max([width(l) for l in lines] + [0])
+        if len(lines) > 1:
+            longest_line = max_width
         self.width = min(longest_line, max_width)
 
         self.height = font.get_sized_height(font_size) * (len(lines) - 1) + font.get_rect(lines[-1], size=font_size).height

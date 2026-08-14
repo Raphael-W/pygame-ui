@@ -30,15 +30,40 @@ class AutoSizeElement(Element):
         return width, height
 
     def get_auto_size(self):
-        all_children = self.get_children(only_visible=True)
-        if len(all_children) == 0:
+        children = self.get_children(only_visible=True)
+        if len(children) == 0:
             return 100, 100
 
-        content = all_children[0]
-        return self._apply_padding(content.get_size())
+        width = height = 0
+        for child in children:
+            child_width, child_height = self._child_extent(child)
+            width = max(width, child_width)
+            height = max(height, child_height)
+
+        return self._apply_padding((width, height))
+
+    def _child_extent(self, child):
+        # How much content-box size this one child needs
+        stick = child.stick
+        n, e, s, w = stick["n"], stick["e"], stick["s"], stick["w"]
+
+        width = child.width if (e and w) else child.offset_x + child.width
+        height = child.height if (n and s) else child.offset_y + child.height
+
+        return width, height
 
     def set_auto_dimensions(self):
         self.set_dimensions(*self.get_size())
+
+    def set_dimensions(self, new_width, new_height):
+        user_width, user_height = self.user_dimensions
+        if not self.fit_width_to_content:
+            user_width = new_width
+        if not self.fit_height_to_content:
+            user_height = new_height
+        self.user_dimensions = (user_width, user_height)
+
+        super().set_dimensions(new_width, new_height)
 
     def _normalised_padding(self) -> tuple:
         padding = self.style["padding"]
