@@ -114,7 +114,7 @@ class FilePicker(ModalElement):
         x_rel_mouse, y_rel_mouse = self.get_relative_mouse()
         list_top = 121
         if (15 <= x_rel_mouse < 290) and (list_top <= y_rel_mouse < list_top + self.height - 191) and self.hovered:
-            row_height = self.font.get_sized_glyph_height(self.filename_font_size) + 10
+            row_height = self.get_font().get_sized_glyph_height(self.filename_font_size) + 10
             item_index = (y_rel_mouse - list_top + self.scroll_bar.get_value()) // row_height
             if item_index < len(self.filtered_files):
                 return list(self.filtered_files.keys())[item_index]
@@ -166,7 +166,7 @@ class FilePicker(ModalElement):
 
         pygame.draw.rect(surface, self.style["bg_color"], (x, y, self.width, self.height), 0, 15)
 
-        row_height = self.font.get_sized_glyph_height(self.filename_font_size) + 10
+        row_height = self.get_font().get_sized_glyph_height(self.filename_font_size) + 10
         scroll_y = self.scroll_bar.get_value()
 
         self.selection_surface.fill((0, 0, 0, 0))
