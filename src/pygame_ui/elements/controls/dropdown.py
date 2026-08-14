@@ -16,7 +16,7 @@ class Dropdown(Element):
         self.expanded = False
         self.action = action
 
-        self.main_button = TextButton(self, options[self.index], (0, 0), (self.width, self.height), stick = "nw", styling={"text_stick": "nsw", "text_offset": (self.height / 2, 0)}, action = self.toggle)
+        self.main_button = TextButton(self, options[self.index], (0, 0), (self.width, self.height), stick = "nw", styling={"text_stick": "nsw", "text_offset": (self.height / 2, 0), "padding": 0}, action = self.toggle)
         down_image = Image(self.main_button, asset_path("icons", "down.png"), (self.height / 2, 0), "nes", styling={"scale": 0.8}, transparent = True)
         self.register_style_mapping(down_image, {"color": "icon_color"})
 
@@ -24,7 +24,7 @@ class Dropdown(Element):
         with Linker(self.get_root().get_popover_layer(), self) as linker:
             for i in range(len(options)):
                 option_button = TextButton(linker, options[i], (0, self.height * (i + 1)), (self.width, self.height), stick = "nw",
-                                           styling={"text_stick": "nsw", "text_offset": (self.height / 2, 0)},
+                                           styling={"text_stick": "nsw", "text_offset": (self.height / 2, 0), "padding": 0},
                                            show = False, action = lambda i_snap=i: self.select_option(i_snap))
                 self.option_buttons.append(option_button)
 

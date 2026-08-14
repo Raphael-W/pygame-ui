@@ -2,10 +2,10 @@ import pygame
 import pygame.freetype
 
 from ...utils import mult_color
-from ...element import Element
+from ..layout import AutoSizeElement
 from ..display import Label, Image
 
-class Button (Element):
+class Button (AutoSizeElement):
     style_defaults = {"color": (100, 100, 100), "border_radius": 10, "border_weight": 0, "border_color": (100, 100, 100)}
 
     def __init__(self, parent, content = None, offset = (0, 0), dimensions = (200, 50), stick = "", action = None, **kwargs):
@@ -19,6 +19,7 @@ class Button (Element):
     def set_content_element(self, element):
         self.content = element
         self.set_disabled(self.disabled)
+        self.set_auto_dimensions()
 
     def on_click(self):
         if self.action is not None:

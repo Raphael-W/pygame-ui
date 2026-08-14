@@ -84,7 +84,7 @@ def build():
     Label(layer, "CONTROLS", (400, 120), "nw", tag=TAG_HEADING)
 
     buttons = Row(layer, (400, 150), "nw", spacing=10)
-    TextButton(buttons, "Button", dimensions=(110, 40),
+    TextButton(buttons, "Button", dimensions=(None, None),
                action=lambda: print("clicked"))
     TextButton(buttons, "Disabled", dimensions=(110, 40), disabled=True)
     ImageButton(buttons, asset_path("icons", "plus.png"), dimensions=(40, 40),
