@@ -51,7 +51,8 @@ class FilePicker(ModalElement):
             self.rename_track_button = ImageButton(bottom_row, asset_path("icons", "rename.png"), dimensions=(40, 40), styling={"color": (120, 120, 120), "image_scale": 0.8}, action = self.rename_file)
             self.register_style_mapping(self.rename_track_button, {"image_color": "icon_color", "color": "action_button_color"})
 
-        self.font = pygame.freetype.Font(FONT_PATH, 18)
+        self.font = None
+        self.filename_font_size = 18
         self.files_surface = None
         self.selection_surface = None
         self.scroll_bar = ScrollBar(self, self.height - 191, self.height - 191, (30, 121), "ne")
@@ -62,6 +63,12 @@ class FilePicker(ModalElement):
     def on_style_changed(self):
         super().on_style_changed()
         self._render_files()
+        self.font = None
+
+    def get_font(self):
+        if self.font is None:
+            self.font = self.create_font()
+        return self.font
 
     def _load_files(self):
         self.files = {}
@@ -93,12 +100,12 @@ class FilePicker(ModalElement):
                 if path.stem[:len(search)].lower() == search.lower():
                     self.filtered_files[index] = path
 
-        self.files_surface = pygame.Surface((self.width, len(self.filtered_files) * (self.font.get_sized_glyph_height() + 10)), pygame.SRCALPHA)
-        self.selection_surface = pygame.Surface((self.width, len(self.filtered_files) * (self.font.get_sized_glyph_height() + 10)), pygame.SRCALPHA)
+        self.files_surface = pygame.Surface((self.width, len(self.filtered_files) * (self.get_font().get_sized_glyph_height(self.filename_font_size) + 10)), pygame.SRCALPHA)
+        self.selection_surface = pygame.Surface((self.width, len(self.filtered_files) * (self.get_font().get_sized_glyph_height(self.filename_font_size) + 10)), pygame.SRCALPHA)
 
         paths = list(self.filtered_files.values())
         for i in range(len(paths)):
-            self.font.render_to(self.files_surface, (0, 10 + (i * (self.font.get_sized_glyph_height() + 10))), paths[i].stem, self.style["font_color"])
+            self.get_font().render_to(self.files_surface, (0, 10 + (i * (self.get_font().get_sized_glyph_height(self.filename_font_size) + 10))), paths[i].stem, self.style["font_color"], size=self.filename_font_size)
 
         self.scroll_bar.set_section_height(self.files_surface.height)
         self.selected_file = None
@@ -107,7 +114,7 @@ class FilePicker(ModalElement):
         x_rel_mouse, y_rel_mouse = self.get_relative_mouse()
         list_top = 121
         if (15 <= x_rel_mouse < 290) and (list_top <= y_rel_mouse < list_top + self.height - 191) and self.hovered:
-            row_height = self.font.get_sized_glyph_height() + 10
+            row_height = self.font.get_sized_glyph_height(self.filename_font_size) + 10
             item_index = (y_rel_mouse - list_top + self.scroll_bar.get_value()) // row_height
             if item_index < len(self.filtered_files):
                 return list(self.filtered_files.keys())[item_index]
@@ -159,7 +166,7 @@ class FilePicker(ModalElement):
 
         pygame.draw.rect(surface, self.style["bg_color"], (x, y, self.width, self.height), 0, 15)
 
-        row_height = self.font.get_sized_glyph_height() + 10
+        row_height = self.font.get_sized_glyph_height(self.filename_font_size) + 10
         scroll_y = self.scroll_bar.get_value()
 
         self.selection_surface.fill((0, 0, 0, 0))

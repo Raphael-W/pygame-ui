@@ -1,4 +1,5 @@
 import pygame
+import pygame.freetype
 from .utils import FONT_PATH
 from .node import Node
 
@@ -198,6 +199,16 @@ class Element(Node):
     def get_theme(self):
         theme = self.parent.get_theme()  # UI returns self.theme at the root
         return theme.extended(self.subtree_theme)
+
+    def create_font(self):
+        if font_name := self.style.get("font_name"):
+            font = pygame.freetype.SysFont(font_name, 0)
+        elif font_path := self.style.get("font_path"):
+            font = pygame.freetype.Font(font_path)
+        else:
+            font = pygame.freetype.SysFont("", 0)
+        return font
+
 
     @property
     def style(self):

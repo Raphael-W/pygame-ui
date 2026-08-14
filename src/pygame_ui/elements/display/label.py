@@ -85,17 +85,8 @@ class Label(Element):
 
     def get_font(self) -> pygame.freetype.Font:
         if self.font is None:
-            self.font = self._create_font()
+            self.font = self.create_font()
         return self.font
-
-    def _create_font(self):
-        if font_name := self.style["font_name"]:
-            font = pygame.freetype.SysFont(font_name, 0)
-        elif font_path := self.style["font_path"]:
-            font = pygame.freetype.Font(font_path)
-        else:
-            font = pygame.freetype.SysFont("", 0)
-        return font
 
     def on_style_changed(self):
         self.font = None

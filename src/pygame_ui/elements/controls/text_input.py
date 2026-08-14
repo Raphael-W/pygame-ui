@@ -56,10 +56,14 @@ class TextInput(Element):
     def on_style_changed(self):
         super().on_style_changed()
         self.clear_button.update_styling_property("image_scale", 0.04 * self.style["font_size"])
-        self.font = pygame.freetype.Font(self.style["font_path"], self.style["font_size"])
-        self.font.origin = True
+        self.font = None
 
         self.set_dimensions(self.style["length"], self.style["font_size"] * 2)
+
+    def get_font(self):
+        if self.font is None:
+            self.font = self.create_font()
+        return self.font
 
     def _backspace(self):
         if self.cursor_index > 0:
@@ -81,11 +85,11 @@ class TextInput(Element):
     def calculate_text_width(self, to_index = -1):
         if to_index < 0:
             to_index = len(self.text)
-        return sum(m[4] for m in self.font.get_metrics(self.text[:to_index]))
+        return sum(m[4] for m in self.get_font().get_metrics(self.text[:to_index], size=self.style["font_size"]))
 
     def index_at_x(self, text_x):
         advance = 0
-        for i, m in enumerate(self.font.get_metrics(self.text)):
+        for i, m in enumerate(self.get_font().get_metrics(self.text, size=self.style["font_size"])):
             if text_x < advance + m[4] / 2:  # nearer the left edge of this char
                 return i
             advance += m[4]
@@ -177,9 +181,9 @@ class TextInput(Element):
             pygame.draw.rect(surface, border_color, (x - 1, y - 1, self.width + 2, self.height + 2), width = 2, border_radius = self.style["border_radius"])
 
         if self.text == "":
-            text_surface, text_rect = self.font.render(self.placeholder,self.style["placeholder_font_color"])
+            text_surface, text_rect = self.get_font().render(self.placeholder,self.style["placeholder_font_color"], size=self.style["font_size"])
         else:
-            text_surface, text_rect = self.font.render(self.text + self.suffix, self.style["font_color"])
+            text_surface, text_rect = self.get_font().render(self.text + self.suffix, self.style["font_color"], size=self.style["font_size"])
 
         # --- Handle setting the text x offset ---
         cursor_x = self.x_padding + self.calculate_text_width(self.cursor_index)
