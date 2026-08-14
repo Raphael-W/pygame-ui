@@ -193,7 +193,9 @@ while running:
     screen.fill(current_bg())
 
     events = pygame.event.get()
-    for event in events:
+    unconsumed_events = ui.handle_events(events)
+
+    for event in unconsumed_events:
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.WINDOWRESIZED:
@@ -203,8 +205,6 @@ while running:
             reload_theme()
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_p:
             next_pack()
-
-    ui.handle_events(events)
 
     # Auto-close the splash modal after its timer
     if state["splash"] is not None:

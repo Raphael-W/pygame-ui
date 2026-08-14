@@ -44,12 +44,17 @@ class UI(Node):
     def handle_events(self, events):
         mouse_events = [e for e in events if e.type in (pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP, pygame.MOUSEWHEEL)]
         keyboard_events = [e for e in events if e.type in (pygame.KEYDOWN, pygame.KEYUP, pygame.TEXTINPUT)]
+        unconsumed_events = []
 
         node = self.focused
         if node is not None:
             for event in keyboard_events:
-                while (not node.handle_keyboard_event(event)) and (node.parent is not self) and (node.parent.is_selected()):
+                while (not (consumed := node.handle_keyboard_event(event))) and (node.parent is not self) and (node.parent.is_selected()):
                     node = node.parent
+                if not consumed:
+                    unconsumed_events.append(event)
+        else:
+            unconsumed_events += keyboard_events
 
         child = self.leaf_under_mouse()
         for event in mouse_events:
@@ -59,13 +64,20 @@ class UI(Node):
                 else:
                     self.clear_focus()
 
+            consumed = False
+
             # Every element must receive button releases, whether hovered or not
             if event.type == pygame.MOUSEBUTTONUP:
                 for child in self.get_descendants(True, True):
-                    child.handle_mouse_event(event)
+                    consumed = child.handle_mouse_event(event)
             else:
                 if (child is not None) and (not child.disabled):
-                    child.handle_mouse_event(event)
+                    consumed = child.handle_mouse_event(event)
+
+            if not consumed:
+                unconsumed_events.append(event)
+
+        return unconsumed_events
 
     def draw(self):
         self.invalidate_hovered()
