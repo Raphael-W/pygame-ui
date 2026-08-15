@@ -51,8 +51,8 @@ class Element(Node):
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             if self._held_down:
                 self.on_click()
+                self.on_release()
             self._held_down = False
-            self.on_release()
             return True
 
     def on_click(self):
