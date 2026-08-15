@@ -8,7 +8,7 @@ from ...utils import asset_path
 class Accordion(AutoSizeElement):
     style_defaults = {"color": (50, 50, 50, 200), "border_radius": 15, "button_color": (100, 100, 100), "icon_color": (200, 200, 200), "padding": (15, 15)}
 
-    def __init__(self, parent, title, offset = (30, 30), dimensions = (300, 400), stick = "se", **kwargs):
+    def __init__(self, parent, title, offset = (30, 30), dimensions = None, stick = "se", **kwargs):
         super().__init__(parent, offset, dimensions, stick, **kwargs)
         self.expanded_dimensions = dimensions
         self.expanded = True
