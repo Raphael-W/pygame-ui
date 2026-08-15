@@ -206,6 +206,7 @@ while running:
 
     events = pygame.event.get()
     unconsumed_events = ui.handle_events(events)
+    print(unconsumed_events)
 
     for event in unconsumed_events:
         if event.type == pygame.QUIT:

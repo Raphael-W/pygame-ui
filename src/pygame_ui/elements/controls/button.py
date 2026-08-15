@@ -12,6 +12,7 @@ class Button (AutoSizeElement):
         super().__init__(parent, offset, dimensions, stick, **kwargs)
         self.content = content
         self.action = action
+        self.set_auto_dimensions()
 
     def get_content_element(self):
         return self.content
