@@ -2,6 +2,7 @@ import pygame
 import pygame.freetype
 from .utils import FONT_PATH
 from .node import Node
+from .theme import InvalidStylePropertyError
 
 class Element(Node):
     style_defaults = {"cursor": pygame.SYSTEM_CURSOR_ARROW, "font_path": FONT_PATH, "font_name": None}
@@ -234,6 +235,9 @@ class Element(Node):
         if self._style is None:
             resolved = dict(self.class_defaults())
             resolved.update(self.get_theme().resolve(self))
+            for prop in self.styling or {}:
+                if prop not in resolved:
+                    raise InvalidStylePropertyError(prop, set(resolved))
             resolved.update(self.styling or {})
             self._style = resolved
         return self._style
