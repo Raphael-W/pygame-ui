@@ -53,9 +53,16 @@ class AutoSizeElement(Element):
         return width, height
 
     def set_auto_dimensions(self):
-        self.set_dimensions(*self.get_size())
+        # Apply the computed size directly; bypass set_dimensions() so this
+        # internal recompute doesn't get mistaken for a user-set explicit
+        # dimension and clobber fit_width/height_to_content.
+        Element.set_dimensions(self, *self.get_size())
 
     def set_dimensions(self, new_width, new_height):
+        self.fit_width_to_content = new_width is None
+        self.fit_height_to_content = new_height is None
+        self.user_dimensions = (new_width, new_height)
+
         user_width, user_height = self.user_dimensions
         if not self.fit_width_to_content:
             user_width = new_width

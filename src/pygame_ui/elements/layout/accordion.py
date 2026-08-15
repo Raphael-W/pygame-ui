@@ -10,8 +10,7 @@ class Accordion(AutoSizeElement):
 
     def __init__(self, parent, title, offset = (30, 30), dimensions = (300, 400), stick = "se", **kwargs):
         super().__init__(parent, offset, dimensions, stick, **kwargs)
-
-        self.expanded_width, self.expanded_height = dimensions
+        self.expanded_dimensions = dimensions
         self.expanded = True
 
         Label(self, title, (0, 10), "new", styling = {"font_size": 18, "min_font_size": 12, "max_width": self.width - 120, "wrap_mode": "ellipse"})
@@ -24,7 +23,7 @@ class Accordion(AutoSizeElement):
 
         if expanded:
             self.toggle_button.set_source(asset_path("icons", "minus.png"))
-            self.set_dimensions(self.expanded_width, self.expanded_height)
+            self.set_dimensions(*self.expanded_dimensions)
         else:
             self.toggle_button.set_source(asset_path("icons", "plus.png"))
             self.set_dimensions(60, 60)
