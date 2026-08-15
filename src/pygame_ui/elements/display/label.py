@@ -37,6 +37,8 @@ class Label(Element):
 
         def ellipsize(words):
             words = list(words)
+            if width(" ".join(words)) <= max_width:
+                return words
             candidate = words + ["..."]
             while width(" ".join(candidate)) > max_width and len(words) > 1:
                 words.pop()
@@ -54,7 +56,7 @@ class Label(Element):
                 continue
 
             if wrap_mode == "ellipse":
-                lines.append(" ".join(ellipsize(line)))
+                lines.append(" ".join(ellipsize(candidate)))
                 line = []
                 break
 

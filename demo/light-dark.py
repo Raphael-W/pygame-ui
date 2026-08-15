@@ -138,7 +138,7 @@ def build():
                                                path.name, ("Nice", None))))
 
     # Accordion pinned bottom-right
-    panel = Accordion(layer, "Extras", dimensions=(300, None), stick="se",
+    panel = Accordion(layer, "Untitled Track", dimensions=(300, None), stick="se",
                        hover_hint="Click the corner button to collapse")
     with Column(panel, offset=(0, 60), stick="ew") as col:
         Label(col, "Accordions collapse into a corner button.", stick="nw",
@@ -206,7 +206,6 @@ while running:
 
     events = pygame.event.get()
     unconsumed_events = ui.handle_events(events)
-    print(unconsumed_events)
 
     for event in unconsumed_events:
         if event.type == pygame.QUIT:
