@@ -8,6 +8,7 @@ class Row(Container):
         super().__init__(parent, offset, stick, **kwargs)
 
     def _layout(self):
+        # TODO: Allow for a width (& height?) rather than always making it based on the size of content
         self.slots = {}
 
         cursor = 0

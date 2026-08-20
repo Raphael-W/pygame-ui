@@ -10,7 +10,7 @@ class Accordion(AutoSizeElement):
 
     def __init__(self, parent, title, offset = (30, 30), dimensions = None, stick = "se", **kwargs):
         super().__init__(parent, offset, dimensions, stick, **kwargs)
-        self.expanded_dimensions = dimensions
+        self.expanded_dimensions = self.user_dimensions
         self.expanded = True
 
         Label(self, title, (0, 10), "new", styling = {"font_size": 18, "min_font_size": 12, "max_width": self.width - 120, "wrap_mode": "ellipse"})
