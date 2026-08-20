@@ -7,9 +7,8 @@
 
 ## Contents
 
-- [Element API](#element-api) — [Lifecycle hooks](#lifecycle-hooks) · [Visibility & state](#visibility--state) · [Position & size](#position--size) · [Styling](#styling)
 - [Getting Started](#getting-started) — [Installation](#installation) · [Quick start](#quick-start)
-- [Core Concepts](#core-concepts) — [Building layouts](#building-layouts) · [Positioning: offset + stick](#positioning-offset--stick) · [Auto-sizing](#auto-sizing) · [Common constructor parameters](#common-constructor-parameters)
+- [Core Concepts](#core-concepts) — [Element API](#element-api) · [Building layouts](#building-layouts) · [Positioning: offset + stick](#positioning-offset--stick) · [Auto-sizing](#auto-sizing) · [Common constructor parameters](#common-constructor-parameters)
 - [Styling & Theming](#styling--theming) — [Themes](#themes) · [Instance styling](#instance-styling) · [Subtree themes](#subtree-themes) · [Styles every element understands](#styles-every-element-understands)
 - [Elements](#elements)
   - [Layout](#layout) — [Layer](#layer) · [Container](#container) · [Column](#column) · [Row](#row) · [Accordion](#accordion)
