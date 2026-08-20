@@ -24,60 +24,6 @@ A UI library for [pygame](https://pyga.me/) that gives you buttons, sliders, tex
 
 ---
 
-## Element API
-
-Every element in the library is an `Element` underneath, and inherits everything below. Elements just add their own constructor parameters and styles on top.
-
-### Lifecycle hooks
-
-Called automatically every frame. Only relevant if you're [subclassing](#writing-your-own-element) — the base implementations are no-ops (`draw` just draws children):
-
-| Hook                           | Called                                                                                                        |
-|--------------------------------|---------------------------------------------------------------------------------------------------------------|
-| `update()`                     | every frame, even while hidden                                                                                |
-| `visible_update()`             | every frame, only while visible and enabled                                                                   |
-| `draw(surface)`                | every frame while visible; call `self.draw_children(surface)` at the end                                      |
-| `on_press()`                   | mouse button pressed down on this element                                                                     |
-| `on_release()`                 | mouse button released while this element was the one held down                                                |
-| `on_click()`                   | press and release both landed on this element (a full click)                                                  |
-| `handle_mouse_event(event)`    | used to handle other mouse events (other than the ones above); return `True` to consume it                    |
-| `handle_keyboard_event(event)` | when a keyboard event reaches the focused element (or bubbles up to an ancestor); return `True` to consume it |
-| `on_screen_resize()`           | window resized                                                                                                |
-
-### Visibility & state
-
-| Method                   | Description                                                             |
-|--------------------------|-------------------------------------------------------------------------|
-| `set_show(value)`        | Show or hide the element                                                |
-| `set_disabled(disabled)` | Enable/disable the element and all its descendants                      |
-| `remove()`               | Detach the element from the UI                                          |
-| `bring_to_front()`       | Move the element above its siblings                                     |
-| `is_selected()`          | Whether the element currently holds focus                               |
-| `is_held_down()`         | Whether the primary mouse button is currently held down on this element |
-| `get_hover_hint()`       | The tooltip text set via `hover_hint=`, if any                          |
-
-### Position & size
-
-| Method                 | Description                                                                                         |
-|------------------------|-----------------------------------------------------------------------------------------------------|
-| `get_pos()`            | Screen position `(x, y)`, computed from offset + stick                                              |
-| `get_size()`           | Current `(width, height)`                                                                           |
-| `set_dimensions(w, h)` | Resize the element (either axis may be `None` on elements that support [auto-sizing](#auto-sizing)) |
-| `width` / `height`     | Properties equivalent to `get_size()[0]` / `[1]`; assigning calls `set_dimensions`                  |
-| `under_mouse()`        | Whether the cursor is currently over the element's bounds                                           |
-
-### Styling
-
-| Method                                     | Description                                                                            |
-|--------------------------------------------|----------------------------------------------------------------------------------------|
-| `style` (property)                         | The element's fully resolved style dictionary                                          |
-| `update_styling(rules)`                    | Merge new `{property: value}` rules into this element's instance styling               |
-| `update_styling_property(prop, value)`     | Change one style property                                                              |
-| `update_subtree_theme(rules, cls=Element)` | Add theme rules that apply to every descendant — see [Subtree themes](#subtree-themes) |
-| `get_cursor()`                             | The resolved `cursor` style — what the mouse cursor shows while hovering this element  |
-
----
-
 ## Getting Started
 
 ### Installation
@@ -135,6 +81,60 @@ Three calls, every frame: `ui.handle_events(events)` before your own event handl
 ---
 
 ## Core Concepts
+
+### Element API
+
+Every element in the library is an `Element` underneath, and inherits everything below. Elements just add their own constructor parameters and styles on top.
+
+#### Lifecycle hooks
+
+Called automatically every frame. Only relevant if you're [subclassing](#writing-your-own-element) — the base implementations are no-ops (`draw` just draws children):
+
+| Hook                           | Called                                                                                                        |
+|--------------------------------|---------------------------------------------------------------------------------------------------------------|
+| `update()`                     | every frame, even while hidden                                                                                |
+| `visible_update()`             | every frame, only while visible and enabled                                                                   |
+| `draw(surface)`                | every frame while visible; call `self.draw_children(surface)` at the end                                      |
+| `on_press()`                   | mouse button pressed down on this element                                                                     |
+| `on_release()`                 | mouse button released while this element was the one held down                                                |
+| `on_click()`                   | press and release both landed on this element (a full click)                                                  |
+| `handle_mouse_event(event)`    | used to handle other mouse events (other than the ones above); return `True` to consume it                    |
+| `handle_keyboard_event(event)` | when a keyboard event reaches the focused element (or bubbles up to an ancestor); return `True` to consume it |
+| `on_screen_resize()`           | window resized                                                                                                |
+
+#### Visibility & state
+
+| Method                   | Description                                                             |
+|--------------------------|-------------------------------------------------------------------------|
+| `set_show(value)`        | Show or hide the element                                                |
+| `set_disabled(disabled)` | Enable/disable the element and all its descendants                      |
+| `remove()`               | Detach the element from the UI                                          |
+| `bring_to_front()`       | Move the element above its siblings                                     |
+| `is_selected()`          | Whether the element currently holds focus                               |
+| `is_held_down()`         | Whether the primary mouse button is currently held down on this element |
+| `get_hover_hint()`       | The tooltip text set via `hover_hint=`, if any                          |
+
+#### Position & size
+
+| Method                 | Description                                                                                         |
+|------------------------|-----------------------------------------------------------------------------------------------------|
+| `get_pos()`            | Screen position `(x, y)`, computed from offset + stick                                              |
+| `get_size()`           | Current `(width, height)`                                                                           |
+| `set_dimensions(w, h)` | Resize the element (either axis may be `None` on elements that support [auto-sizing](#auto-sizing)) |
+| `width` / `height`     | Properties equivalent to `get_size()[0]` / `[1]`; assigning calls `set_dimensions`                  |
+| `under_mouse()`        | Whether the cursor is currently over the element's bounds                                           |
+
+#### Styling
+
+| Method                                     | Description                                                                            |
+|--------------------------------------------|----------------------------------------------------------------------------------------|
+| `style` (property)                         | The element's fully resolved style dictionary                                          |
+| `update_styling(rules)`                    | Merge new `{property: value}` rules into this element's instance styling               |
+| `update_styling_property(prop, value)`     | Change one style property                                                              |
+| `update_subtree_theme(rules, cls=Element)` | Add theme rules that apply to every descendant — see [Subtree themes](#subtree-themes) |
+| `get_cursor()`                             | The resolved `cursor` style — what the mouse cursor shows while hovering this element  |
+
+---
 
 ### Building layouts
 
